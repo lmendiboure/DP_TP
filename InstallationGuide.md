@@ -30,7 +30,7 @@ sudo apt-get update
 sudo apt-get install oracle-java8-installer
 ```
 
-# Etape 4 : Configurer spark
+### Etape 4 : Configurer spark
   - Commencez par ouvrir le fichier de configuration
 ```console
 cd /usr/lib/spark/conf/  
