@@ -7,3 +7,20 @@ De nombreux outils (Pandas, Hadoop, Spark, etc.), des moteurs de traitement de d
 **Note: A la fin de la scéance, pensez à m'envoyer un compte-rendu répondant aux différentes questions présentes dans ce TP (leo.mendiboure@labri.fr)**
 
 ## Partie 1: Questions préliminaires
+
+Pk Spark Mis en avant ?
+
+Qu'est ce que MapReduce ? Qu'est sont les étapes du traitement de données ? Pourquoi ça marche mieux avec spark ? https://i.pinimg.com/originals/15/2b/79/152b7931555b284af0dbd3446636b059.png
+
+Qu'est ce que le traitement en mémoire ? Pour quels avantages ?
+
+Qu'est ce que les RDD ? Data Frame ? DataSets ?
+
+PySpark Streaming/SQL/Machine learning 
+
+Pourquoi Jupiter Notebool
+
+# Partie 2: Installation et prise en main
+
+
+
