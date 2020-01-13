@@ -120,7 +120,7 @@ Une autre chose pertinente pourrait être de traiter les résultats que l'on veu
 
 *Note: Pour ce faire, on pourra utiliser la fonction filter: rdd.filter(lambda x: x[1] > 0)*
 
-*Note 1: x[1] correspond ici à la value de la paire key-value, peut être pas l'élément surr lequel nous devons nous agir*
+*Note 1: x[1] correspond ici à la value de la paire key-value, peut être pas l'élément sur lequel nous devons nous agir.*
 
 **Q.13**  Indiquez la ligne de commande que vous venez d'utiliser.
 
