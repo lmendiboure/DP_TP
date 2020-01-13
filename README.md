@@ -16,17 +16,28 @@ Liens:
   - https://fr.blog.businessdecision.com/spark-traitements-big-data/
   - https://databricks.com/blog/2014/11/05/spark-officially-sets-a-new-record-in-large-scale-sorting.html
   
-**Q.2**
+**Q.2** Les outils de traitement de données d'appuient sur des techniques de partitionnement des données. Quel est l'intérêt de telles techniques ? Qu'est ce que le HDFS ? Si un dossier contient un historique de fichiers de logs des 4 derniers années, quelle métrique pourra être utilisée pour le diviser en sous dossiers ? 
+
+Liens :
+  - https://www.datio.com/iaas/understanding-the-data-partitioning-technique/
+  - 
+  
+  
+  
+**Q.3** RDD + opés possibles DataFrame/DataSets
+
+**Q.4** MapReduce
 
 Qu'est ce que MapReduce ? Qu'est sont les étapes du traitement de données ? Pourquoi ça marche mieux avec spark ? https://i.pinimg.com/originals/15/2b/79/152b7931555b284af0dbd3446636b059.png
 
-Qu'est ce que le traitement en mémoire ? Pour quels avantages ?
+**Q.5** Un avantage important de PySpark est de pouvoir s'intégrer avec de nombreux outils destinés aux personnes travaillant dans le domaine du traitement de données. On parle notamment de Streaming, SQL, Machine Learning et Graphes. A quoi correspondent ces différents outils ? Que permettent ils ? Donnez un exemple d'utilisation contenant l'ensemble de ces étapes.
 
-HDFS, KAfka
+Liens :
+  - https://fr.blog.businessdecision.com/spark-traitements-big-data/
+  - https://data-flair.training/blogs/apache-spark-ecosystem-components/
+  - https://www.toptal.com/spark/introduction-to-apache-spark
 
-Qu'est ce que les RDD ? Data Frame ? DataSets ?
-
-PySpark Streaming (kafka)/SQL/Machine learning 
+**Q.6**
 
 Pourquoi Jupiter Notebooll ?
 
@@ -40,6 +51,11 @@ Pour réaliser l'installation de l'ensemble des composants nécessaires, ouvrez 
 
 L'exemple basique d'utilisation de PySpark (et de nombreux autres moteurs de traitement de données) consiste à réaliser des opérations dans un fichier texte. Il s'agit notamment d'extraction et de comptage de mots.
 
+http://b3d.bdpedia.fr/spark-batch.html#reprise-sur-panne
+
+https://realpython.com/pyspark-intro/#big-data-concepts-in-python
+
+http://cedric.cnam.fr/vertigo/Cours/RCP216/tpDonneesNumeriques.html
 
 
 ## Partie 3: Machine learning et PySpark
