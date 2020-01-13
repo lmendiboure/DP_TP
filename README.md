@@ -110,12 +110,23 @@ On peut directement afficher le résultat du count en utilisant la fonction `cou
 
 **Q.11** On peut également utiliser les fonctions `first()` ou `count()`. Que permettent elles de faire ? En sachant que l'on peut trier une liste à l'aide de la fonction `sortByKey()` donnez la ligne de commande permettant d'afficher une liste triée.
 
-Dans le code précédent on peut constater que certains mots ne sont pas encore correctements traités. En effet, `split()` ne prend en compte que les espaces et non les `";.,`. Modifiez le code précédent pour que tous les mots soient traités correctements (ie par exemple `English.` devra être traité comme `English`). 
+Dans le code précédent on peut constater que certains mots ne sont pas encore correctements traités (ie par exemple `English.`, `English`, `English;`). En effet, `split()` ne prend en compte que les espaces et non les `";.,`. Modifiez le code précédent pour que tous les mots soient traités correctements (ie par exemple `English.` devra être traité comme `English`).
 
+*Note: Pour ce faire, il sera peut être pertinent d'utiliser une fonction comme replace.*
 
+**Q.12** Indiquez la ligne de commande que vous venez d'utiliser.
+
+Une autre chose pertinente pourrait être de traiter les résultats que l'on veut afficher à l'écran. On va ici essayer de les trier en fonction de la longueur des mots. Ainsi, on ne va plus vouloir afficher que des mots avec une longueur supérieure à 3.
+
+*Note: Pour ce faire, on pourra utiliser la fonction filter: rdd.filter(lambda x: x[1] > 0)*
+*Note 1: x[1] correspond ici à la value de la paire key-value, peut être pas l'élément surr lequel nous devons nous agir*
+
+**Q.13**  Indiquez la ligne de commande que vous venez d'utiliser.
 
 
 ## Partie 3: Machine learning et PySpark
+
+
 
 ## Partie 4: A vous de jouer
 
