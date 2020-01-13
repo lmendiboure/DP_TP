@@ -16,30 +16,47 @@ Liens:
   - https://fr.blog.businessdecision.com/spark-traitements-big-data/
   - https://databricks.com/blog/2014/11/05/spark-officially-sets-a-new-record-in-large-scale-sorting.html
   
-**Q.2** Les outils de traitement de données d'appuient sur des techniques de partitionnement des données. Quel est l'intérêt de telles techniques ? Qu'est ce que le HDFS ? Si un dossier contient un historique de fichiers de logs des 4 derniers années, quelle métrique pourra être utilisée pour le diviser en sous dossiers ? 
+**Q.2** Les outils de traitement de données d'appuient sur des techniques de partitionnement des données. Quel est l'intérêt de telles techniques ? Qu'est ce que le HDFS ? Quels sont les avantages de cette technologie ? Si un dossier contient un historique de fichiers de logs des 4 derniers années, quelle métrique pourra être utilisée pour le diviser en sous dossiers ? 
 
 Liens :
   - https://www.datio.com/iaas/understanding-the-data-partitioning-technique/
-  - 
+  - https://www.hdfstutorial.com/why-hdfs-needed/
   
-  
-  
-**Q.3** RDD + opés possibles DataFrame/DataSets
+**Q.3** Lorsque l'on utilise un environnement HDFS, on le combine généralement avec une technologie nommée MapReduce ? Que permet de faire cette technologie ? Qu'est ce qu'un Mapper (et donc la fonction Map) ? Un Reducer (et donc la fonction Reduce) ? Illustrez le fonctionnement de ces deux fonctions au travers d'un exemple.
 
-**Q.4** MapReduce
+Liens :
+  - https://fr.talend.com/resources/what-is-mapreduce/
+  - https://blog.xebia.fr/2014/07/22/article-programmez-developper-un-job-mapreduce-pour-hadoop/
+  - https://blog.soat.fr/2015/05/comprendre-mapreduce/
+  
+**Q.3** La principale différence entre Spark et la technologie de MapReduce est que le traitement des données est réalisé en mémoire avec Spark (améliorant fortement les performances !). On parle de RDD. Qu'est ce qu'une RDD ? On parle également de DataFrame et Dataset ? Quelles différences avec une RDD ? 
+
+Liens : 
+  - http://b3d.bdpedia.fr/files/slspark.pdf
+  - https://www.slideshare.net/LiliaSfaxi/bigdatatp3-nosql-avec-cassandra
+  - http://b3d.bdpedia.fr/spark-batch.html
+
+**Q.4** Ces différents types d'abstrations de données (notamment les RDD) peuvent supporter deux types d'opérations. Quel est leur nom ? A quoi correspondent elles ?
+
+Liens:
+  - https://www.toptal.com/spark/introduction-to-apache-spark
+
+**Q.5** MapReduce
 
 Qu'est ce que MapReduce ? Qu'est sont les étapes du traitement de données ? Pourquoi ça marche mieux avec spark ? https://i.pinimg.com/originals/15/2b/79/152b7931555b284af0dbd3446636b059.png
 
-**Q.5** Un avantage important de PySpark est de pouvoir s'intégrer avec de nombreux outils destinés aux personnes travaillant dans le domaine du traitement de données. On parle notamment de Streaming, SQL, Machine Learning et Graphes. A quoi correspondent ces différents outils ? Que permettent ils ? Donnez un exemple d'utilisation contenant l'ensemble de ces étapes.
+**Q.6** Un avantage important de PySpark est de pouvoir s'intégrer avec de nombreux outils destinés aux personnes travaillant dans le domaine du traitement de données. On parle notamment de Streaming, SQL, Machine Learning et Graphes. A quoi correspondent ces différents outils ? Que permettent ils ? Donnez un exemple d'utilisation contenant l'ensemble de ces étapes.
 
 Liens :
   - https://fr.blog.businessdecision.com/spark-traitements-big-data/
   - https://data-flair.training/blogs/apache-spark-ecosystem-components/
   - https://www.toptal.com/spark/introduction-to-apache-spark
 
-**Q.6**
+**Q.7** Dans le cadre de ce TP on va se servir non seulement de PySpark mais également de Jupyter Notebook. Qu'est ce que Jupyter Notebook ? Quels sont les avantages de cet outil ? Pourquoi l'utiliser ici ?
 
-Pourquoi Jupiter Notebooll ?
+Liens :
+  - https://www.sicara.ai/blog/2017-05-02-get-started-pyspark-jupyter-notebook-3-minutes
+  - https://www.nature.com/articles/d41586-018-07196-1
 
 ## Partie 2: Installation et prise en main
 
