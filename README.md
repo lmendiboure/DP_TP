@@ -68,19 +68,51 @@ Liens :
 
 ## Partie 2: Installation et prise en main
 
-### 2.1 Installation
+### 2.1 Installation de l'environnement
 
 Pour réaliser l'installation de l'ensemble des composants nécessaires, ouvrez le fichier d'installation (https://github.com/lmendiboure/DP_TP/blob/master/InstallationGuide.md) et suivez l'ensemble des étapes décrites.
 
-### 2.2 Prise en main
+### 2.2 Prise en main et premiers traitements
 
-L'exemple basique d'utilisation de PySpark (et de nombreux autres moteurs de traitement de données) consiste à réaliser des opérations dans un fichier texte. Il s'agit notamment d'extraction et de comptage de mots.
+L'exemple basique d'utilisation de PySpark (et de nombreux autres moteurs de traitement de données) consiste à réaliser des opérations dans sur fichier texte. Il s'agit notamment d'extraction/sélection/comptage de mots.
 
-http://b3d.bdpedia.fr/spark-batch.html#reprise-sur-panne
+On va donc commencer avec cet exemple simple.
 
-https://realpython.com/pyspark-intro/#big-data-concepts-in-python
+Pour ce faire, si ce n'est pas déjà fait, commencez par vous placer dans le dossier contenant le projet (DP_TP).
 
-http://cedric.cnam.fr/vertigo/Cours/RCP216/tpDonneesNumeriques.html
+Lancez également Pyspark si ce n'est pas déjà fait (`pyspark`).
+
+Dans votre navigateur internet, Jupyter Notebook devrait s'être ouvert. Si ce n'est pas le cas, accédez à l'URL http://localhost:8888/tree.
+
+Une fois que c'est fait, cliquez sur `Nouveau` > `Python 2`.
+
+A partir de ce moment vous vous trouvez dans une fenêtre vous permettant d'entrer/exécuter du code avec PySpark (il est possible que le noyeau de PySpark mette quelques secondes/minutes à se lancer).
+
+On va maintenant rentrer les lignes de codes suivantes:
+
+```console
+text_file = sc.textFile("./word_count_text.txt") # Il est possible que ce chemin ne fonctionne pas
+counts = text_file.flatMap(lambda line: line.encode("ascii", "ignore").split()) \
+             .map(lambda word: (word, 1)) \
+             .reduceByKey(lambda a, b: a + b)
+counts.saveAsTextFile("./output")
+```
+
+**Q.9** Qu'est ce qu'une fonction lambda en Python ? (https://www.guru99.com/python-lambda-function.html)
+
+Dans le bout de code précédent on fait appel à 3 fonctions. Une première qui sépare le texte de départ en mots (et l'encode en UTF-8), une seconde qui va identifier chaque mot comme une entrée (clé, valeur) et une troisième qui va associer deux entrées si elles ont une même clé (ie si c'est le même mot). 
+
+Exécutez le bout de code précédent (à l'aide de la commande `Exécuter`).
+
+**Q.10** Si vous accédez au contenu du répertoire `output` situé dans le répertoire courant que contient-t-il ? Pourquoi y a-t-il donc plusieurs fichiers ? Que ce passe-t-il si vous cherchez à nouveau à exécuter le bout de code précédent ? A quoi correspond cette erreur ?
+
+On peut directement afficher le résultat du count en utilisant la fonction `counts.collect()`. Ceci peut vous permettre de visualiser les différentes étapes menant au comptage du nombre de mots.
+
+**Q.11** On peut également utiliser les fonctions `first()` ou `count()`. Que permettent elles de faire ? En sachant que l'on peut trier une liste à l'aide de la fonction `sortByKey()` donnez la ligne de commande permettant d'afficher une liste triée.
+
+Dans le code précédent on peut constater que certains mots ne sont pas encore correctements traités. En effet, `split()` ne prend en compte que les espaces et non les `";.,`. Modifiez le code précédent pour que tous les mots soient traités correctements (ie par exemple `English.` devra être traité comme `English`). 
+
+
 
 
 ## Partie 3: Machine learning et PySpark
