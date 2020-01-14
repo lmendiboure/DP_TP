@@ -125,11 +125,9 @@ Une autre chose pertinente pourrait être de traiter les résultats que l'on veu
 **Q.13**  Indiquez la ligne de commande que vous venez d'utiliser.
 
 
-## Partie 3: Machine learning et PySpark: Un exemple concret
+## Partie 3: Apprentissage machine et PySpark: Un exemple concret
 
-Dans cette partie on va considérer un 
-
-Commencez par récupérer le fichier csv et affichez en le schéma à l'écran:
+Commencez par récupérer le fichier csv que nous allons utiliser dans toute cette partie et affichez en son schéma à l'écran:
 
 ```console
 from pyspark import SparkFiles
@@ -140,7 +138,7 @@ df = sqlContext.read.csv(SparkFiles.get("adult_data.csv"), header=True, inferSch
 df.printSchema()
 ```
 
-**Q.14** Si vous modifiez la valeur de la variable `inferSchema` et que vous la mettez à `False`, quelle différence observez vous ? Quel semble être donc l'intérêt de cette variable ?
+**Q.14** Que semble contenir ce fichier ? Si vous modifiez la valeur de la variable `inferSchema` et que vous la mettez à `False`, quelle différence observez vous ? Quel semble être donc l'intérêt de cette variable ?
 
 On peut également décider de modifier le type d'une colonne sans l'utilisation de ce paramètre. Pour ce faire, il faut utiliser la fonction `df[name].cast(newType)`.
 
@@ -155,9 +153,39 @@ En combinant cette fonction avec la fonction `select`, on peut choisir de ne vis
 On peut également réaliser bien d'autres types d'opérations comme:
   1. `df.crosstab('age', 'income').sort("age_income").show(100)`
   2. `df.groupBy("education").count().sort("count",ascending=True).show()`	
-  3. `df.drop('education_num').columns`
+  3. `df.drop('education-num').columns`
   4. `df.filter(df.age > 40).count()`
+  5. `df.groupby('marital').agg({'capital-gain': 'mean'}).show()`			
   
 **Q.17** Que permettent de faire chacune des lignes ci-dessus ?
 
+On va maintenant ajouter une nouvelle colonne à notre schéma: le carré de l'âge.
+
+En effet, l'âge n'a pas une évolution linéaire par rapport au revenu: une personne jeune aura tendance à gagner peu, une personne en milieu/fin de carrière à avoir un salaire bien plus élevé et une personne retraitée aura tendance à voir son salaire diminuer fortement. C'est donc souvent le carré de l'âge qui est utilisé et non l'âge lui même (pour mettre plus en avant cette évolution).
+
+**Q.18** En sachant que la fonction `withColumn(col_name, value)`, ajoutez une nouvelle colonne `age_square` dont la valeur est égale au carré de la colonne `age`. Donnez la ligne de commande permettant d'y parvenir.
+
+Note: `**2` permet de calculer le carré.
+
+Si vous souhaitez réorganiser l'ordre des colonnes, vous pouvez le faire à l'aide de la commande `select`.
+
+Par exemple:
+
+```console
+COLUMNS = ['age', 'age_square', 'workclass', 'fnlwgt', 'education', 'education-num', 'marital',
+           'occupation', 'relationship', 'race', 'sex', 'capital-gain', 'capital-loss',
+           'hours-week', 'native-country', 'label']
+df = df.select(COLUMNS)
+```
+
+**Q.19** Si l'on affiche le nombre de personnes venant de Hollande et qu'on le compare au nombre de personne provenant d'autres pays, que peut on constater ? Pensez vous qu'il est pertinent de garder cette personne venant de Hollande dans cette étude ? (cf code ci-dessous)
+
+```console
+df.filter(df['native-country'] == 'Holand-Netherlands').count()
+df.groupby('native-country').agg({'native-country': 'count'}).sort("count(native-country)").show()
+```
+
+Retirez des données cette personne à l'aide de la commande:
+
+`df_remove = df.filter(df['native-country'] !=	'Holand-Netherlands')`
 
