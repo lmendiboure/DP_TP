@@ -189,3 +189,16 @@ Retirez des données cette personne à l'aide de la commande:
 
 `df_remove = df.filter(df['native-country'] !=	'Holand-Netherlands')`
 
+
+
+## Partie 4 : ITS et PySpark : Petit travail de réflexion
+
+Beaucoup de villes mettent à disposition des données concernant leur infrastructures: listes de gares, aires de covoiturage, liste d'équipements sportifs, aménagements cyclables, etc.
+
+C'est le cas de la métropole de Bordeaux par exemple (https://opendata.bordeaux-metropole.fr/explore/?disjunctive.publisher&disjunctive.frequence&disjunctive.territoire&sort=title)
+
+**Q.** En considérant le tableau ci dessous:
+
+https://opendata.lillemetropole.fr/explore/dataset/comptage_siredo_historique/table/?sort=-annee&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiU1VNIiwieUF4aXMiOiJtam8iLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiJyYW5nZS1BY2NlbnQifV0sInhBeGlzIjoidmlsbGUiLCJtYXhwb2ludHMiOm51bGwsInNvcnQiOiIiLCJzZXJpZXNCcmVha2Rvd24iOiJhbm5lZSIsInN0YWNrZWQiOiJub3JtYWwiLCJzZXJpZXNCcmVha2Rvd25UaW1lc2NhbGUiOiJ5ZWFyIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJjb21wdGFnZV9zaXJlZG9faGlzdG9yaXF1ZSIsIm9wdGlvbnMiOnsic29ydCI6Ii1hbm5lZSJ9fX1dLCJ0aW1lc2NhbGUiOiIiLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlfQ%3D%3D
+
+quel type d'applications de Spark et plus particulièrement de Machine Learning peut on imaginer ? Donnez au moins 3 exemples.
