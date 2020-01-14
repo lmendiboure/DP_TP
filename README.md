@@ -125,7 +125,43 @@ Une autre chose pertinente pourrait être de traiter les résultats que l'on veu
 **Q.13**  Indiquez la ligne de commande que vous venez d'utiliser.
 
 
-## Partie 3: Machine learning et PySpark
+## Partie 3: Machine learning et PySpark: Un premier exemple
+
+Dans cette partie on va considérer un 
+
+Commencez par récupérer le fichier csv et affichez en le schéma à l'écran:
+
+```console
+from pyspark import SparkFiles
+
+url = "https://raw.githubusercontent.com/guru99-edu/R-Programming/master/adult_data.csv"
+sc.addFile(url)
+df = sqlContext.read.csv(SparkFiles.get("adult_data.csv"), header=True, inferSchema= True)
+df.printSchema()
+```
+
+**Q.14** Si vous modifiez la valeur de la variable `inferSchema` et que vous la mettez à `False`, quelle différence observez vous ? Quel semble être donc l'intérêt de cette variable ?
+
+On peut également décider de modifier le type d'une colonne sans l'utilisation de ce paramètre. Pour ce faire, il faut utiliser la fonction `df[name].cast(newType)`.
+
+**Q.15** Comment faudrait il faire pour changer le type de la colonne `age` en flottant ? donnez la ligne de code permettant d'y parvenir.
+
+Pour pouvoir visualiser le contenu d'un ensemble de N lignes, nous pouvez utiliser la fonction show `show(N)`.
+
+En combinant cette fonction avec la fonction `select`, on peut choisir de ne visualiser que certaines colonnes, par exemple pour les colonnes `age` et `genre`: `df.select('age','gender').show(5)`.
+
+**Q.16** Quels type d'informations permet de récupérer la fonction `describe` (`df.describe("age").show()`) ?
+
+On peut également réaliser bien d'autres types d'opérations comme:
+  * `df.crosstab('age', 'income').sort("age_income").show(100)`
+  * `df.groupBy("education").count().sort("count",ascending=True).show()`	
+  * `df.drop('education_num').columns`
+  * `df.filter(df.age > 40).count()`
+  
+**Q.17** Que permettent de faire chacune des lignes ci-dessus ?
+
+
+
 
 
 
