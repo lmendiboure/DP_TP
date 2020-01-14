@@ -125,7 +125,7 @@ Une autre chose pertinente pourrait être de traiter les résultats que l'on veu
 **Q.13**  Indiquez la ligne de commande que vous venez d'utiliser.
 
 
-## Partie 3: Machine learning et PySpark: Un premier exemple
+## Partie 3: Machine learning et PySpark: Un exemple concret
 
 Dans cette partie on va considérer un 
 
@@ -153,17 +153,11 @@ En combinant cette fonction avec la fonction `select`, on peut choisir de ne vis
 **Q.16** Quels type d'informations permet de récupérer la fonction `describe` (`df.describe("age").show()`) ?
 
 On peut également réaliser bien d'autres types d'opérations comme:
-  * `df.crosstab('age', 'income').sort("age_income").show(100)`
-  * `df.groupBy("education").count().sort("count",ascending=True).show()`	
-  * `df.drop('education_num').columns`
-  * `df.filter(df.age > 40).count()`
+  1. `df.crosstab('age', 'income').sort("age_income").show(100)`
+  2. `df.groupBy("education").count().sort("count",ascending=True).show()`	
+  3. `df.drop('education_num').columns`
+  4. `df.filter(df.age > 40).count()`
   
 **Q.17** Que permettent de faire chacune des lignes ci-dessus ?
 
-
-
-
-
-
-## Partie 4: A vous de jouer
 
