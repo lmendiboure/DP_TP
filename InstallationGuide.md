@@ -40,7 +40,9 @@ wget -O - http://debian.opennms.org/OPENNMS-GPG-KEY | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install oracle-java8-installer
 ```
-  - Puis suivre les instructions de l'installer (peut prendre quelques minutes)
+  - Suivre les instructions de l'installer (peut prendre quelques minutes)
+  
+  - Vérifiez que l'installation a bien fonctionné (`java -version`)
 
 ### Etape 4 : Configurer spark
   - Commencez par ouvrir le fichier de configuration adapté : 
