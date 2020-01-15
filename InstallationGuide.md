@@ -1,6 +1,12 @@
 
 # PySpark et Jupyter Notebook: Guide d'installation
 
+### Etape 0: Vérifiez que Python 2.7 est bien installé
+
+  - Pour ce faire: `python --version`
+  
+  - Si jamais Python 2.7 n'est pas installé: `sudo apt install python2.7 python-pip`
+
 ### Etape 1: Téléchargement de Spark
 
   - Choisissez la dernière version disponible de Spark : http://spark.apache.org/downloads.html
@@ -59,7 +65,7 @@ JAVA_HOME=/usr/lib/jvm/java-8-oracle
 SPARK_WORKER_MEMORY=4g
 ```
 
-### Etape 5 : Télécharger et installer Anaconda
+### Etape 5 : Télécharger et installer Anaconda (pour python 2.7 ! )
 
   - Pour télécharger Anaconda : https://www.anaconda.com/distribution/#linux
   - Une fois téléchargé, excécutez le script d'install et validez toutes les questions
