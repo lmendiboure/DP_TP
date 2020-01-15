@@ -128,6 +128,11 @@ Une autre chose pertinente pourrait être de traiter les résultats que l'on veu
 
 #### 2.2.2 Manipulations de DataFrames
 
+Et si l'on voulait maintenant faire la même chose avec des DataFrames et non des RDDs ?
+
+La principale différence avec des RDDs est qu'une DataFrame est une collection de données RDDs structurée. C'est à dire qu'au lien d'être simplement stockées dans "une grosse boite", les données vont maintenant être stockées sous forme de tableau (dans un ensemble de colonnes nommées). On connait maintenant le schéma des données (ie telle colonne correspond à tel type d'information) et éventuellement le type des données (int, string, etc.). Ceci vise à permettre avant tout un traitement bien plus rapide des données (ie on peut filtrer en fonction de la valeur d'un champ) mais également d'établir des relations entre les différentes colonnes (tables relationnelles !) ouvrant de nombreuses possibilités par rapport aux simples RDDs. Il est bon de préciser que les DataFrames sont une surcouche (ie une façon de visualiser les RDDs) et non un autre type de données de PySpark.
+
+
 #### 2.2.3 PySpark Streaming
 
 Et si on voulait faire la même chose avec PySpark Streaming ?
@@ -155,16 +160,17 @@ words = lines.flatMap(lambda line: line.split(" "))
 pairs = words.map(lambda word: (word, 1))
 wordCounts = pairs.reduceByKey(lambda x, y: x + y)
 
- # On affiche le résultat
+# On affiche le résultat
+
 wordCounts.pprint()
 
 # Pour lancer le traitement avec Spark Streaming, il est nécessaire d'appeler la fonction start. En effet, l'exécution d'une fonction finale (map, print, etc.) ne suffit pas à lancer le traitement.
 
+ssc.start()  
+
 # Chaque traitement (ie du buffer d'une seconde) est lancé dans un thread. Or, il est primordial que le programme principal (ie celui qui va lancer l'ensemble des threads) continue à tourner. Pour ce faire, on utilise la fonction awaitTermination.
 
-ssc.start()             # Start the computation
-ssc.awaitTermination()  # Wait for the computation to terminate
-
+ssc.awaitTermination()  
 ```
 
 Si maintenant on veut tester le code que l'on vient d'écrire et vérifier que toutes les secondes il récupère bien les données disponibles et es traite.
