@@ -94,9 +94,15 @@ On va maintenant rentrer les lignes de codes suivantes:
 
 ```console
 text_file = sc.textFile("./word_count_text.txt") # Il est possible que ce chemin ne fonctionne pas
+
+# counts correspond à des données stockées dans le format de base de Spark: une RDD.
+
 counts = text_file.flatMap(lambda line: line.encode("ascii", "ignore").split()) \
              .map(lambda word: (word, 1)) \
              .reduceByKey(lambda a, b: a + b)
+
+# On stocke le résultat
+
 counts.saveAsTextFile("./output")
 ```
 
@@ -132,6 +138,31 @@ Et si l'on voulait maintenant faire la même chose avec des DataFrames et non de
 
 La principale différence avec des RDDs est qu'une DataFrame est une collection de données RDDs structurée. C'est à dire qu'au lien d'être simplement stockées dans "une grosse boite", les données vont maintenant être stockées sous forme de tableau (dans un ensemble de colonnes nommées). On connait maintenant le schéma des données (ie telle colonne correspond à tel type d'information) et éventuellement le type des données (int, string, etc.). Ceci vise à permettre avant tout un traitement bien plus rapide des données (ie on peut filtrer en fonction de la valeur d'un champ) mais également d'établir des relations entre les différentes colonnes (tables relationnelles !) ouvrant de nombreuses possibilités par rapport aux simples RDDs. Il est bon de préciser que les DataFrames sont une surcouche (ie une façon de visualiser les RDDs) et non un autre type de données de PySpark.
 
+En exécutant le code ci-dessous, vous pourrez noter des différences importantes dans l'affichage par rapport à la partie précédente.
+
+```console
+textFile = sc.textFile("./ex")
+
+# Comme tout à l'heure on définit une RDD
+
+rdd = textFile.flatMap(lambda line: line.split(" ")).map(lambda word: (word, 1))
+
+# On ajoute une sur couche: une DataFrame
+
+df = sqlContext.createDataFrame(rdd,["word","count"])
+df.show()
+
+# Cette DataFrame peut ensuite être manipulée très simplement
+
+countsByAppearance = df.groupBy("word").count()
+countsByAppearance.orderBy("count",ascending=False).show(1000, False)
+```
+
+On peut noter notamment ici la définition de colonnes (word, count) mais surtout la facilité avec laquelle on peut agir sur ces colonnes pour: compter le nombre de mots, ordonner ces colonnes par exemple en fonction du nombre d'apparitions, etc.
+
+C'est donc là le gros avantage des DataFrames: la possibilité de manipuler plus simplement les données.
+
+Grâce à cela, les DataFrames permettent des manipulations de données plus rapides ainsi qu'une meilleure gestion du cache en mémoire (on peut stocker moins de données).
 
 #### 2.2.3 PySpark Streaming
 
