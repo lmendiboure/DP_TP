@@ -16,7 +16,7 @@ tar xzvf spark-2.4.4-bin-hadoop2.7.tgz # Unziper le projet
 mv spark-2.4.4-bin-hadoop2.7/ spark # Renommer le projet
 sudo mv spark/ /usr/lib/ # Déplacer le projet
 ```
-### Etape 2 : Installer SBT
+### Etape 2 : Installer SBT (= maven for Java and Scala projects)
   - Pour ce faire, entrez les commandes suivantes dans un terminal
 ```console
 echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list  
