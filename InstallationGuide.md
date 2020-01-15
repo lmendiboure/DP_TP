@@ -3,11 +3,13 @@
 
 ### Etape 1: Téléchargement de Spark
 
-  - Choisissez la dernière version disponible de Spark: http://spark.apache.org/downloads.html
+  - Choisissez la dernière version disponible de Spark : http://spark.apache.org/downloads.html
 
 **Attention, ce qui nous intéresse c'est la V2 stable d'Aout et non la V3 en test pour l'instant !** 
 
 Note: l'accès au lien d'install peut prendre un certain temps (notamment sur les machines de l'école).
+
+Note 1 : Pour accélérer les choses, vous pouvez par exemple prendre un autre mirror que celui proposer (celui de l'université de Lorraine, entre autres, fonctionne bien)
   
   - Tapez ensuite les commandes suivantes
  
@@ -27,29 +29,29 @@ sudo apt-get install sbt
 
 ### Etape 3 : Installer Java
 
-  - Si jamais Java 8 n'est pas installé (`java -version`):
+  - Si jamais Java 8 n'est pas installé (`java -version`) :
 
 **Il est essentiel que ce soit la V 8, si c'est la V7, rien ne fonctionnera par la suite !** 
 
-  - Ouvrez le fichier sources.list :  `nano /etc/apt/sources.list`
-
+  - Tapez dans un terminal de commande les lignes suivantes :
 ```console
-deb http://debian.opennms.org/ stable main
+echo "deb http://debian.opennms.org/ stable main" >> /etc/apt/sources.list
 wget -O - http://debian.opennms.org/OPENNMS-GPG-KEY | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install oracle-java8-installer
 ```
-  - Puis suivre les instructions de l'installer
+  - Puis suivre les instructions de l'installer (peut prendre quelques minutes)
 
 ### Etape 4 : Configurer spark
-  - Commencez par ouvrir le fichier de configuration
+  - Commencez par ouvrir le fichier de configuration adapté : 
+  
 ```console
 cd /usr/lib/spark/conf/  
 cp spark-env.sh.template spark-env.sh  # On copie le fichier de conf existant pour garder une base
 nano spark-env.sh
 ```
 
-  - Ajoutez les deux lignes suivantes:
+  - Ajoutez les deux lignes suivantes :
 ```console
 JAVA_HOME=/usr/lib/jvm/java-8-oracle  
 SPARK_WORKER_MEMORY=4g
