@@ -141,7 +141,7 @@ La principale différence avec des RDDs est qu'une DataFrame est une collection 
 En exécutant le code ci-dessous, vous pourrez noter des différences importantes dans l'affichage par rapport à la partie précédente.
 
 ```console
-textFile = sc.textFile("./ex")
+textFile = sc.textFile("./word_count_text.txt")
 
 # Comme tout à l'heure on définit une RDD
 
