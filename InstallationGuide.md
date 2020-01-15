@@ -91,6 +91,8 @@ export PYTHONPATH=$SPARK_HOME/python:$PYTHONPATH
 
   - Clonez (ou téléchargez) le dossier du TP : `git clone https://github.com/lmendiboure/DP_TP.git`
   
+Note: Pour installer git: `sudo apt-get install git`
+  
   - Placez vous dans le dossier du TP `DP_TP`
   
 **Note: Pour toute la suite du TP, on considérera que l'on travaille depuis ce dossier**
