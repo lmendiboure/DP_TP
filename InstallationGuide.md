@@ -4,11 +4,16 @@
 ### Etape 1: Téléchargement de Spark
 
   - Choisissez la dernière version disponible de Spark: http://spark.apache.org/downloads.html
+
+**Attention, ce qui nous intéresse c'est la V2 stable d'Aout et non la V3 en test pour l'instant !** 
+
+Note: l'accès au lien d'install peut prendre un certain temps (notamment sur les machines de l'école).
+  
   - Tapez ensuite les commandes suivantes
  
 ```console
-tar xzvf spark-2.0.1-bin-hadoop2.7.tgz # Unziper le projet
-mv spark-2.0.1-bin-hadoop2.7/ spark # Renommer le projet
+tar xzvf spark-2.4.4-bin-hadoop2.7.tgz # Unziper le projet
+mv spark-2.4.4-bin-hadoop2.7/ spark # Renommer le projet
 sudo mv spark/ /usr/lib/ # Déplacer le projet
 ```
 ### Etape 2 : Installer SBT
@@ -22,13 +27,19 @@ sudo apt-get install sbt
 
 ### Etape 3 : Installer Java
 
-  - Si jamais Java n'est pas installé (`java -version`):
+  - Si jamais Java 8 n'est pas installé (`java -version`):
+
+**Il est essentiel que ce soit la V 8, si c'est la V7, rien ne fonctionnera par la suite !** 
+
+  - Ouvrez le fichier sources.list :  `nano /etc/apt/sources.list`
 
 ```console
-sudo apt-add-repository ppa:webupd8team/java  
-sudo apt-get update  
+deb http://debian.opennms.org/ stable main
+wget -O - http://debian.opennms.org/OPENNMS-GPG-KEY | sudo apt-key add -
+sudo apt-get update
 sudo apt-get install oracle-java8-installer
 ```
+  - Puis suivre les instructions de l'installer
 
 ### Etape 4 : Configurer spark
   - Commencez par ouvrir le fichier de configuration
@@ -47,7 +58,7 @@ SPARK_WORKER_MEMORY=4g
 ### Etape 5 : Télécharger et installer Anaconda
 
   - Pour télécharger Anaconda : https://www.anaconda.com/distribution/#linux
-  - Une fois téléchargé, excécutez le script d'install
+  - Une fois téléchargé, excécutez le script d'install et validez toutes les questions
 
 ### Etape 6 : Configurer le fichier _bash_
   - Ouvrir le fichier bashrc: `nano ~/.bashrc`
@@ -60,7 +71,7 @@ export SPARK_HOME=/usr/lib/spark
 export PATH=$PATH:$JAVA_HOME/bin
 export PATH=$PATH:$SBT_HOME/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin
 export PYSPARK_DRIVER_PYTHON=jupyter
-export PYSPARK_DRIVER_PYTHON_OPTS='notebook'
+export PYSPARK_DRIVER_PYTHON_OPTS='notebook --allow-root'
 export PYSPARK_PYTHON=python2.7
 export PYTHONPATH=$SPARK_HOME/python:$PYTHONPATH
 ```
