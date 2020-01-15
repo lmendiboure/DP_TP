@@ -77,7 +77,12 @@ export PYTHONPATH=$SPARK_HOME/python:$PYTHONPATH
 ```
   - Rechargez le fichier bashrc : `source ~/.bashrc`
   
-Si l'ensemble des étapes d'installation ont fonctionné, vous devriez pouvoir lancer PySpark et Jupyter Notebook a l'aide de la commande suivante: `pyspark`
- 
- 
-_Note :_ https://medium.com/@brajendragouda/installing-apache-spark-on-ubuntu-pyspark-on-juputer-ca8e40e8e655 (source) 
+### Etape 8 : Téléchargement du sujet de TP et du fichier de test
+
+  - Clonez (ou téléchargez) le dossier du TP : `git clone https://github.com/lmendiboure/DP_TP.git`
+  
+  - Placez vous dans le dossier du TP `DP_TP`
+  
+**Note: Pour toute la suite du TP, on considérera que l'on travaille depuis ce dossier**
+  
+Si l'ensemble des étapes d'installation ont fonctionné, vous devriez pouvoir lancer PySpark et Jupyter Notebook a l'aide de la commande suivante: `pyspark` 
