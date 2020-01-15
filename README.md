@@ -189,7 +189,7 @@ Retirez des données cette personne à l'aide de la commande:
 
 `df_remove = df.filter(df['native-country'] !=	'Holand-Netherlands')`
 
-
+SRC pour suite : https://www.slideshare.net/MichrafyMustafa/apache-spark-mlib-principes-et-concepts-pour-la-mise-en-uvre-des-mthodes-dapprentissage
 
 ## Partie 4 : ITS et PySpark : Petit travail de réflexion
 
