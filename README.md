@@ -224,11 +224,8 @@ Pour ajouter des données au serveur, il vous suffit simplement d'écrire dans l
 Commencez par récupérer le fichier csv que nous allons utiliser dans toute cette partie et affichez en son schéma à l'écran:
 
 ```console
-from pyspark import SparkFiles
+df = spark.read.csv("iris.data", inferSchema=True).toDF("sep_len", "sep_wid", "pet_len", "pet_wid", "label")
 
-url = "https://raw.githubusercontent.com/guru99-edu/R-Programming/master/adult_data.csv"
-sc.addFile(url)
-df = sqlContext.read.csv(SparkFiles.get("adult_data.csv"), header=True, inferSchema= True)
 df.printSchema()
 ```
 
@@ -236,54 +233,155 @@ df.printSchema()
 
 On peut également décider de modifier le type d'une colonne sans l'utilisation de ce paramètre. Pour ce faire, il faut utiliser la fonction `df[name].cast(newType)`.
 
-**Q.15** Comment faudrait il faire pour changer le type de la colonne `age` en flottant ? donnez la ligne de code permettant d'y parvenir.
+**Q.15** Comment faudrait il faire pour changer le type de la colonne `sep_wid` en flottant ? Donnez la ligne de code permettant d'y parvenir.
 
 Pour pouvoir visualiser le contenu d'un ensemble de N lignes, nous pouvez utiliser la fonction show `show(N)`.
 
-En combinant cette fonction avec la fonction `select`, on peut choisir de ne visualiser que certaines colonnes, par exemple pour les colonnes `age` et `genre`: `df.select('age','gender').show(5)`.
+En combinant cette fonction avec la fonction `select`, on peut choisir de ne visualiser que certaines colonnes, par exemple pour les colonnes `sep_wid` et `pet_len`: `df.select('sep_wid','pet_len').show(5)`.
 
-**Q.16** Quels type d'informations permet de récupérer la fonction `describe` (`df.describe("age").show()`) ?
+**Q.16** Quels type d'informations permet de récupérer la fonction `describe` (`df.describe("sep_wid").show()`) ?
 
 On peut également réaliser bien d'autres types d'opérations comme:
-  1. `df.crosstab('age', 'income').sort("age_income").show(100)`
-  2. `df.groupBy("education").count().sort("count",ascending=True).show()`	
-  3. `df.drop('education-num').columns`
-  4. `df.filter(df.age > 40).count()`
-  5. `df.groupby('marital').agg({'capital-gain': 'mean'}).show()`			
-  
+  1. `df.groupBy("sep_len").count().sort("count",ascending=True).show()`	
+  2. `df.drop('sep_len').columns`
+  3. `df.filter(df["sep_len"] > 6).count()`
+  4. `df.groupby('sep_len').agg({'sep_wid': 'mean'}).show()`
+  5. `df.filter(df['label'] == 'Iris-setosa').count()`
+
 **Q.17** Que permettent de faire chacune des lignes ci-dessus ?
 
-On va maintenant ajouter une nouvelle colonne à notre schéma: le carré de l'âge.
+La classification des espèces d'Iris (fleurs) est un problème utilisé très régulièrement pour les TPs/mises en pratiques d'algorithmes d'apprentissage. Ceci est dû au fait que la problématique est simple (3 espèces) et les paramètres peu nombreux (4 au total). Si vous souhaitez en apprendre un peu plus sur cette classification (réalisée par le botaniste Ronald Fisher): https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique.
 
-En effet, l'âge n'a pas une évolution linéaire par rapport au revenu: une personne jeune aura tendance à gagner peu, une personne en milieu/fin de carrière à avoir un salaire bien plus élevé et une personne retraitée aura tendance à voir son salaire diminuer fortement. C'est donc souvent le carré de l'âge qui est utilisé et non l'âge lui même (pour mettre plus en avant cette évolution).
+**Q.18** Une chaine de traitement d'apprentissage est composée de deux grands types d'éléments, lesquels ?
 
-**Q.18** En sachant que la fonction `withColumn(col_name, value)`, ajoutez une nouvelle colonne `age_square` dont la valeur est égale au carré de la colonne `age`. Donnez la ligne de commande permettant d'y parvenir.
+Vous pourrez trouver la réponse à cette question ici (https://www.slideshare.net/MichrafyMustafa/apache-spark-mlib-principes-et-concepts-pour-la-mise-en-uvre-des-mthodes-dapprentissage) notamment dans les slides 8-10.
 
-Note: `**2` permet de calculer le carré.
-
-Si vous souhaitez réorganiser l'ordre des colonnes, vous pouvez le faire à l'aide de la commande `select`.
-
-Par exemple:
+La première opération que l'on va réaliser est une transformation. Pour pouvoir comparer en même temps les 4 paramètres identifiés par le botaniste (`sep_len`, `sep_wid`, `pet_len`, `pet_wid`). En effet, de nombreux algorithmes d'IA (notamment ceux utilisés par la suite) ne sont capables de traiter que des données de type vecteur: on va donc rassembler l'ensemble des features dans un seul vecteur:
 
 ```console
-COLUMNS = ['age', 'age_square', 'workclass', 'fnlwgt', 'education', 'education-num', 'marital',
-           'occupation', 'relationship', 'race', 'sex', 'capital-gain', 'capital-loss',
-           'hours-week', 'native-country', 'label']
-df = df.select(COLUMNS)
+df = spark.read.csv("iris.data", inferSchema=True).toDF("sep_len", "sep_wid", "pet_len", "pet_wid", "label")
+
+from pyspark.ml.linalg import Vectors
+
+from pyspark.ml.feature import VectorAssembler
+
+
+vector_assembler = VectorAssembler(inputCols=["sep_len", "sep_wid", "pet_len", "pet_wid"],outputCol="features")
+df_temp = vector_assembler.transform(df)
+df_temp.show(3)
 ```
 
-**Q.19** Si l'on affiche le nombre de personnes venant de Hollande et qu'on le compare au nombre de personne provenant d'autres pays, que peut on constater ? Pensez vous qu'il est pertinent de garder cette personne venant de Hollande dans cette étude ? (cf code ci-dessous)
+Vous pouvez visualiser dans la colonne `vector_features` les données vectorisées.
+
+Une fois les données vectorisées, il va falloir les normaliser. Ceci va permettre de standardiser la moyenne et l'écart type des données, simplifiant leur analyse (https://dataanalyticspost.com/Lexique/normalisation/).
+
+Pour ce faire, ajoutez les lignes ci dessous:
 
 ```console
-df.filter(df['native-country'] == 'Holand-Netherlands').count()
-df.groupby('native-country').agg({'native-country': 'count'}).sort("count(native-country)").show()
+from pyspark.ml.feature import StandardScaler
+
+# On définit les paramètres de la normalisation: colonne sur laquelle l'appliquer, nom de la nouvelle colonne
+standardscaler=StandardScaler().setInputCol("vector_features").setOutputCol("Scaled_features")
+
+# On applique la normalisation
+
+df_temp=standardscaler.fit(df_temp).transform(df_temp)
+
+df_temp.select("vector_features","Scaled_features").show(5,False)
 ```
 
-Retirez des données cette personne à l'aide de la commande:
+Dans les données actuelles, une seule colonne va nous intéresser (au delà du label évidemment): celle que l'on vient de créer contenant les données normalisées et vectorisées. En sachant que l'on peut supprimer une colonne avec la fonction `drop(nom_de_la_colonne)`. 
 
-`df_remove = df.filter(df['native-country'] !=	'Holand-Netherlands')`
+**Q.19** Quelle ligne de commande va nous permettre de supprimer l'ensemble des colonnes inutiles ?
 
-SRC pour suite : https://www.slideshare.net/MichrafyMustafa/apache-spark-mlib-principes-et-concepts-pour-la-mise-en-uvre-des-mthodes-dapprentissage
+Les algorithmes d'IA pour pouvoir fonctionner nécessitent de travailler sur des nombres, or, dans l'état actuel, la colonne label correspond à une chaine de caractères. On va donc ajouter les lignes de code suivantes :
+
+```console
+from pyspark.ml.feature import StringIndexer
+
+l_indexer = StringIndexer(inputCol="label", outputCol="labelIndex")
+
+df = l_indexer.fit(df).transform(df)
+
+df.select("label","labelIndex").show(140)
+```
+**Q.20** Que permet donc de faire la fonction `StringIndexer` ?
+
+Maintenant que nos données sont correctement labelisées, on va les séparer en deux "tas", un premier qu'on va utiliser pour l'apprentissage de nos algorithmes et un second qu'on utilisera pour vérifier que l'apprentissage à bien fonctionné.
+
+On parle d'un côté de `training` et de l'autre de `test`.
+
+Pour ce faire, il va suffire d'ajouter la ligne suivante: 
+
+```console
+(trainingData, testData) = df.randomSplit([0.7, 0.3])
+```
+On va maintenant appliquer un premier algorithme d'IA et en évaluer les performances: les arbes de décision (http://cedric.cnam.fr/vertigo/Cours/ml2/coursArbresDecision.html).
+
+Pour ce faire, on va avoir besoin des lignes de code suivantes:
+
+```console
+
+# On ajoute les librairies nécessaires
+
+from pyspark.ml.classification import DecisionTreeClassifier
+from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+
+# On indique les colonnes sur lequelle on veut appliquer l'algorithme
+dt = DecisionTreeClassifier(labelCol="labelIndex", featuresCol="Scaled_features")
+
+# On applique l'algorithme d'arbre de décision sur les données d'entrainement
+
+model = dt.fit(trainingData)
+
+# On test le modèle sur les données prévues à cet effet
+
+predictions = model.transform(testData)
+
+predictions.select("prediction", "labelIndex").show(5)
+
+# on veut maintenant évaluer les performances de l'algorithme
+
+# On commence par indiquer quelles données on veut comparer et en fonction de quelles métriques (ie différence entre la vraie espèce d'iris et l'espèce estimée)
+
+evaluator = MulticlassClassificationEvaluator(labelCol="labelIndex", predictionCol="prediction",metricName="accuracy")
+
+# On applique
+
+accuracy = evaluator.evaluate(predictions)
+print("Test set accuracy = %g " % accuracy)
+```
+On va maintenant appliquer une seconde méthode de classification: la méthode Naive Bayésienne (https://fr.wikipedia.org/wiki/Classification_na%C3%AFve_bay%C3%A9sienne).
+
+Ceci vise avant tout à montrer une chose : quel que soit l'algorithme sélectionné, les étapes à suivre sont les mêmes. 
+
+```console
+#On sépare à nouveau les données
+train = df.randomSplit([0.7, 0.3])
+train = splits[0]
+test = splits[1]
+
+# On fait l'import approprié
+from pyspark.ml.classification import NaiveBayes
+
+# On définit les paramètres de l'algorithme
+nb = NaiveBayes(labelCol="labelIndex",featuresCol="Scaled_features", smoothing=1.0,modelType="multinomial")
+
+# On l'applique
+model = nb.fit(train)
+
+# On le teste
+
+predictions = model.transform(test)
+predictions.select("label", "labelIndex","probability", "prediction").show()
+
+# On le compare à la réalité
+
+evaluator =MulticlassClassificationEvaluator(labelCol="labelIndex",predictionCol="prediction", metricName="accuracy")
+accuracy = evaluator.evaluate(predictions)
+print("Test set accuracy = " + str(accuracy))
+```
+**Conclusion de cette partie :** Même sans connaissance en IA, l'outil de Machine Learning de Spark permet d'appliquer simplement des méthodes d'IA entièrement gérées par la machine (l'humain n'a qu'à paramétrer des options de très haut niveau). Grâce à cela, il est possible pour toute personne de sélectionner l'outil le plus approprié/les paramètres les plus appropriés en fonction de ses besoins et de ses contraintes (temps de traitement, données à disposition, capacité de calcul, etc.)
 
 ## Partie 4 : ITS et PySpark : Petit travail de réflexion
 
@@ -291,7 +389,7 @@ Beaucoup de villes mettent à disposition des données concernant leur infrastru
 
 C'est le cas de la métropole de Bordeaux par exemple (https://opendata.bordeaux-metropole.fr/explore/?disjunctive.publisher&disjunctive.frequence&disjunctive.territoire&sort=title)
 
-**Q.** En considérant le tableau ci dessous:
+**Q.21** En considérant le tableau ci dessous:
 
 https://opendata.lillemetropole.fr/explore/dataset/comptage_siredo_historique/table/?sort=-annee&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiU1VNIiwieUF4aXMiOiJtam8iLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiJyYW5nZS1BY2NlbnQifV0sInhBeGlzIjoidmlsbGUiLCJtYXhwb2ludHMiOm51bGwsInNvcnQiOiIiLCJzZXJpZXNCcmVha2Rvd24iOiJhbm5lZSIsInN0YWNrZWQiOiJub3JtYWwiLCJzZXJpZXNCcmVha2Rvd25UaW1lc2NhbGUiOiJ5ZWFyIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJjb21wdGFnZV9zaXJlZG9faGlzdG9yaXF1ZSIsIm9wdGlvbnMiOnsic29ydCI6Ii1hbm5lZSJ9fX1dLCJ0aW1lc2NhbGUiOiIiLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlfQ%3D%3D
 
