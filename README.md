@@ -2,7 +2,9 @@
 
 Aujourd'hui, que l'on parle d'objets connectés, de santé, de finance ou encore de e-commerce, les volumes de données générés sont très importants. Afin de maximiser les performances (et par conséquent la rentabilité), une analyse de ces données est primordiale.
 
-De nombreux outils (Pandas, Hadoop, Spark, etc.), des moteurs de traitement de données rapide principalement destinés au Big Data ont ainsi été développés. Chacun de ces outils possède des caractéristiques particulières et actuellement Spark est très certainement le moteur de traitement de données Open Source le plus utilisé. C'est pourquoi nous allons essayer de découvrir quelques unes des fonctionnalités de cet outil dans le cadre de ce TP. Ainsi ce TP ce focalise sur le traitement des données (et pas sur le traitement des données ITS). Toutefois, l'ensemble des outils/procédures que nous allons décrouvrir sont applications dans l'environnement ITS.
+De nombreux outils (Pandas, Hadoop, Spark, etc.), des moteurs de traitement de données rapide principalement destinés au Big Data ont ainsi été développés. Chacun de ces outils possède des caractéristiques particulières et actuellement Spark est très certainement le moteur de traitement de données Open Source le plus utilisé. C'est pourquoi nous allons essayer de découvrir quelques unes des fonctionnalités de cet outil dans le cadre de ce TP. 
+
+Ainsi ce TP ce focalise plus généralement sur le traitement des données (et pas uniquement sur le traitement des données ITS) et sur comment celui ci peut être réalisé de façon efficace. L'ensemble des outils/procédures que nous allons découvrir sont bien entendu applications dans l'environnement ITS.
 
 **Note : A la fin de la scéance, pensez à m'envoyer un compte-rendu répondant aux différentes questions présentes dans ce TP (leo.mendiboure@labri.fr)**
 
@@ -16,7 +18,7 @@ Liens:
   - https://fr.blog.businessdecision.com/spark-traitements-big-data/
   - https://databricks.com/blog/2014/11/05/spark-officially-sets-a-new-record-in-large-scale-sorting.html
   
-**Q.2** On parle de Stream Processing et Batch processing. Que signifient ces deux termes. Dans quel cas chacune de ces approches est elle pertinente ?
+**Q.2** On parle de Stream Processing et Batch processing. Que signifient ces deux termes, en quoi sont ils différents ? Dans quel cas chacune de ces approches est elle pertinente ?
 
 Liens:
   - https://medium.com/@gowthamy/big-data-battle-batch-processing-vs-stream-processing-5d94600d8103
@@ -78,7 +80,7 @@ Pour réaliser l'installation de l'ensemble des composants nécessaires, ouvrez 
 
 L'exemple basique d'utilisation de PySpark (et de nombreux autres moteurs de traitement de données) consiste à réaliser des opérations dans sur fichier texte. Il s'agit notamment d'extraction/sélection/comptage de mots.
 
-On va donc commencer avec cet exemple simple.
+On va donc commencer avec cet exemple simple: on va télécharger un fichier en mémoire sous la forme de RDD et chercher à compter le nombre de mots dans ce fichier.
 
 Pour ce faire, si ce n'est pas déjà fait, commencez par vous placer dans le dossier contenant le projet (DP_TP).
 
@@ -88,11 +90,13 @@ Dans votre navigateur internet, Jupyter Notebook devrait s'être ouvert. Si ce n
 
 Une fois que c'est fait, cliquez sur `Nouveau` > `Python 2`.
 
-A partir de ce moment vous vous trouvez dans une fenêtre vous permettant d'entrer/exécuter du code avec PySpark (il est possible que le noyeau de PySpark mette quelques secondes/minutes à se lancer).
+A partir de ce moment, vous vous trouvez dans une fenêtre vous permettant d'entrer/exécuter du code en Python (il est possible que le noyeau de PySpark mette quelques secondes/minutes à se lancer).
 
 On va maintenant rentrer les lignes de codes suivantes:
 
 ```console
+# On récupère le fichier
+
 text_file = sc.textFile("./word_count_text.txt") # Il est possible que ce chemin ne fonctionne pas
 
 # counts correspond à des données stockées dans le format de base de Spark: une RDD.
@@ -108,7 +112,7 @@ counts.saveAsTextFile("./output")
 
 **Q.9** Qu'est ce qu'une fonction lambda en Python ? (https://www.guru99.com/python-lambda-function.html)
 
-Dans le bout de code précédent on fait appel à 3 fonctions. Une première qui sépare le texte de départ en mots (et l'encode en UTF-8), une seconde qui va identifier chaque mot comme une entrée (clé, valeur) et une troisième qui va associer deux entrées si elles ont une même clé (ie si c'est le même mot). 
+Dans le bout de code précédent (plus particulièrement dans la définition de `counts`) on fait appel à 3 fonctions. Une première qui sépare le texte de départ en mots (et l'encode en UTF-8), une seconde qui va identifier chaque mot comme une entrée (clé, valeur) et une troisième qui va associer deux entrées si elles ont une même clé (ie si c'est le même mot). 
 
 Exécutez le bout de code précédent (à l'aide de la commande `Exécuter`).
 
@@ -120,7 +124,7 @@ On peut directement afficher le résultat du count en utilisant la fonction `cou
 
 Dans le code précédent on peut constater que certains mots ne sont pas encore correctements traités (ie par exemple `English.`, `English`, `English;`). En effet, `split()` ne prend en compte que les espaces et non les `";.,`. Modifiez le code précédent pour que tous les mots soient traités correctements (ie par exemple `English.` devra être traité comme `English`).
 
-*Note: Pour ce faire, il sera peut être pertinent d'utiliser une fonction comme replace.*
+*Note: Pour ce faire, il sera peut être pertinent d'utiliser une fonction comme `replace`.*
 
 **Q.12** Indiquez la ligne de commande que vous venez d'utiliser.
 
@@ -136,7 +140,15 @@ Une autre chose pertinente pourrait être de traiter les résultats que l'on veu
 
 Et si l'on voulait maintenant faire la même chose avec des DataFrames et non des RDDs ?
 
-La principale différence avec des RDDs est qu'une DataFrame est une collection de données RDDs structurée. C'est à dire qu'au lien d'être simplement stockées dans "une grosse boite", les données vont maintenant être stockées sous forme de tableau (dans un ensemble de colonnes nommées). On connait maintenant le schéma des données (ie telle colonne correspond à tel type d'information) et éventuellement le type des données (int, string, etc.). Ceci vise à permettre avant tout un traitement bien plus rapide des données (ie on peut filtrer en fonction de la valeur d'un champ) mais également d'établir des relations entre les différentes colonnes (tables relationnelles !) ouvrant de nombreuses possibilités par rapport aux simples RDDs. Il est bon de préciser que les DataFrames sont une surcouche (ie une façon de visualiser les RDDs) et non un autre type de données de PySpark.
+La principale différence avec des RDDs est qu'une DataFrame est une collection de données RDDs structurée. 
+
+C'est à dire qu'au lien d'être simplement stockées dans "une grosse boite", les données vont maintenant être stockées sous forme de tableau (dans un ensemble de colonnes nommées). 
+
+On connait maintenant le schéma des données (ie telle colonne correspond à tel type d'information) et éventuellement le type des données (int, string, etc.). 
+
+Ceci vise à permettre avant tout un traitement bien plus rapide des données (ie on peut filtrer en fonction de la valeur d'un champ) mais également d'établir des relations entre les différentes colonnes (tables relationnelles !) ouvrant de nombreuses possibilités par rapport aux simples RDDs. 
+
+Il est bon de préciser que les DataFrames sont une surcouche (ie une façon de visualiser les RDDs) et non un autre type de données de PySpark.
 
 En exécutant le code ci-dessous, vous pourrez noter des différences importantes dans l'affichage par rapport à la partie précédente.
 
@@ -221,7 +233,7 @@ Pour ajouter des données au serveur, il vous suffit simplement d'écrire dans l
 
 ## Partie 3: Apprentissage machine et PySpark: Un exemple concret
 
-Commencez par récupérer le fichier csv que nous allons utiliser dans toute cette partie et affichez en son schéma à l'écran:
+Commencez par récupérer le fichier csv que nous allons utiliser dans toute cette partie et affichez son schéma à l'écran :
 
 ```console
 df = spark.read.csv("iris.data", inferSchema=True).toDF("sep_len", "sep_wid", "pet_len", "pet_wid", "label")
@@ -250,13 +262,23 @@ On peut également réaliser bien d'autres types d'opérations comme:
 
 **Q.17** Que permettent de faire chacune des lignes ci-dessus ?
 
-La classification des espèces d'Iris (fleurs) est un problème utilisé très régulièrement pour les TPs/mises en pratiques d'algorithmes d'apprentissage. Ceci est dû au fait que la problématique est simple (3 espèces) et les paramètres peu nombreux (4 au total). Si vous souhaitez en apprendre un peu plus sur cette classification (réalisée par le botaniste Ronald Fisher): https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique.
+La classification des espèces d'Iris (fleurs) est un problème utilisé très régulièrement pour les TPs/mises en pratiques d'algorithmes d'apprentissage. 
+
+Ceci est dû au fait que la problématique est simple (3 espèces) et les paramètres peu nombreux (4 au total). 
+
+Si vous souhaitez en apprendre un peu plus sur cette classification (réalisée par le botaniste Ronald Fisher) : https://makina-corpus.com/blog/metier/2017/initiation-au-machine-learning-avec-python-pratique.
+
+Notre objectif ici va donc d'être d'appliquer des algorithmes d'apprentissage machine dans le but de déterminer de quelle espèce d'Iris il s'agit.
 
 **Q.18** Une chaine de traitement d'apprentissage est composée de deux grands types d'éléments, lesquels ?
 
 Vous pourrez trouver la réponse à cette question ici (https://www.slideshare.net/MichrafyMustafa/apache-spark-mlib-principes-et-concepts-pour-la-mise-en-uvre-des-mthodes-dapprentissage) notamment dans les slides 8-10.
 
-La première opération que l'on va réaliser est une transformation. Pour pouvoir comparer en même temps les 4 paramètres identifiés par le botaniste (`sep_len`, `sep_wid`, `pet_len`, `pet_wid`). En effet, de nombreux algorithmes d'IA (notamment ceux utilisés par la suite) ne sont capables de traiter que des données de type vecteur: on va donc rassembler l'ensemble des features dans un seul vecteur:
+La première opération que l'on va réaliser est une transformation. 
+
+Ceci va nous permettre de pouvoir comparer en même temps les 4 paramètres identifiés par le botaniste (`sep_len`, `sep_wid`, `pet_len`, `pet_wid`). 
+
+En effet, de nombreux algorithmes d'IA (notamment ceux utilisés par la suite) ne sont capables de traiter que des données de type vecteur: on va donc rassembler l'ensemble des features dans un seul vecteur.
 
 ```console
 df = spark.read.csv("iris.data", inferSchema=True).toDF("sep_len", "sep_wid", "pet_len", "pet_wid", "label")
@@ -273,7 +295,7 @@ df_temp.show(3)
 
 Vous pouvez visualiser dans la colonne `vector_features` les données vectorisées.
 
-Une fois les données vectorisées, il va falloir les normaliser. Ceci va permettre de standardiser la moyenne et l'écart type des données, simplifiant leur analyse (https://dataanalyticspost.com/Lexique/normalisation/).
+Une fois les données vectorisées, il va falloir les normaliser (nouvelle transformation !). Ceci va permettre de standardiser la moyenne et l'écart type des données, simplifiant leur analyse (https://dataanalyticspost.com/Lexique/normalisation/).
 
 Pour ce faire, ajoutez les lignes ci dessous:
 
@@ -381,7 +403,7 @@ evaluator =MulticlassClassificationEvaluator(labelCol="labelIndex",predictionCol
 accuracy = evaluator.evaluate(predictions)
 print("Test set accuracy = " + str(accuracy))
 ```
-**Conclusion de cette partie :** Même sans connaissance en IA, l'outil de Machine Learning de Spark permet d'appliquer simplement des méthodes d'IA entièrement gérées par la machine (l'humain n'a qu'à paramétrer des options de très haut niveau). Grâce à cela, il est possible pour toute personne de sélectionner l'outil le plus approprié/les paramètres les plus appropriés en fonction de ses besoins et de ses contraintes (temps de traitement, données à disposition, capacité de calcul, etc.)
+**Conclusion de cette partie :** Même sans connaissance en IA, l'outil de Machine Learning de Spark permet d'appliquer des méthodes d'IA entièrement gérées par la machine (l'humain n'a qu'à paramétrer des options de très haut niveau). Grâce à cela, il est possible pour toute personne de sélectionner l'outil le plus approprié/les paramètres les plus appropriés en fonction de ses besoins et de ses contraintes (temps de traitement, données à disposition, capacité de calcul, etc.)
 
 ## Partie 4 : ITS et PySpark : Petit travail de réflexion
 
