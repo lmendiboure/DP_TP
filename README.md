@@ -138,8 +138,7 @@ Dans le code précédent on peut constater que certains mots ne sont pas encore 
 Une autre chose pertinente pourrait être de traiter les résultats que l'on veut afficher à l'écran. On va ici essayer de les trier en fonction de la longueur des mots. Ainsi, on ne va plus vouloir afficher que des mots avec une longueur supérieure à 3.
 
 *Note: Pour ce faire, on pourra utiliser la fonction filter: rdd.filter(lambda x: x[1] > 0)*
-
-*Note 1: x[1] correspond ici à la value de la paire key-value, peut être pas l'élément sur lequel nous devons nous agir.*
+*x[1] correspond ici à la value de la paire key-value, peut être pas l'élément sur lequel nous devons nous agir.*
 
 **Q.13**  Indiquez la ligne de commande que vous venez d'utiliser.
 
