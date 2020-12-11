@@ -6,7 +6,7 @@ De nombreux outils (Pandas, Hadoop, Spark, etc.), des moteurs de traitement de d
 
 Ainsi ce TP ce focalise plus généralement sur le traitement des données (et pas uniquement sur le traitement des données ITS) et sur comment celui ci peut être réalisé de façon efficace. L'ensemble des outils/procédures que nous allons découvrir sont bien entendu applications dans l'environnement ITS.
 
-**Note : A la fin de la scéance, pensez à m'envoyer un compte-rendu répondant aux différentes questions présentes dans ce TP (leo.mendiboure@labri.fr)**
+**Note : A la fin de la scéance, pensez à m'envoyer un compte-rendu (court) répondant aux différentes questions présentes dans ce TP (leo.mendiboure@univ-eiffel.fr)**
 
 ## Partie 1: Questions préliminaires
 
@@ -88,7 +88,7 @@ Lancez également Pyspark si ce n'est pas déjà fait (`pyspark`).
 
 Dans votre navigateur internet, Jupyter Notebook devrait s'être ouvert. Si ce n'est pas le cas, accédez à l'URL http://localhost:8888/tree.
 
-Une fois que c'est fait, cliquez sur `Nouveau` > `Python 2`.
+Une fois que c'est fait, cliquez sur `Nouveau` > `Python 3`.
 
 A partir de ce moment, vous vous trouvez dans une fenêtre vous permettant d'entrer/exécuter du code en Python (il est possible que le noyeau de PySpark mette quelques secondes/minutes à se lancer).
 
@@ -101,9 +101,9 @@ text_file = sc.textFile("./word_count_text.txt") # Il est possible que ce chemin
 
 # counts correspond à des données stockées dans le format de base de Spark: une RDD.
 
-counts = text_file.flatMap(lambda line: line.encode("ascii", "ignore").split()) \
+counts = text_file.flatMap(lambda line: line.split(" ")) \
              .map(lambda word: (word, 1)) \
-             .reduceByKey(lambda a, b: a + b)
+             .reduceByKey(lambda a, b: a + b) \
 
 # On stocke le résultat
 
@@ -112,7 +112,7 @@ counts.saveAsTextFile("./output")
 
 **Q.9** Qu'est ce qu'une fonction lambda en Python ? (https://www.guru99.com/python-lambda-function.html)
 
-Dans le bout de code précédent (plus particulièrement dans la définition de `counts`) on fait appel à 3 fonctions. Une première qui sépare le texte de départ en mots (et l'encode en UTF-8), une seconde qui va identifier chaque mot comme une entrée (clé, valeur) et une troisième qui va associer deux entrées si elles ont une même clé (ie si c'est le même mot). 
+Dans le bout de code précédent (plus particulièrement dans la définition de `counts`) on fait appel à 3 fonctions. Une première qui sépare le texte de départ en mots, une seconde qui va identifier chaque mot comme une entrée (clé, valeur) et une troisième qui va associer deux entrées si elles ont une même clé (ie si c'est le même mot). 
 
 Exécutez le bout de code précédent (à l'aide de la commande `Exécuter`).
 
@@ -120,7 +120,14 @@ Exécutez le bout de code précédent (à l'aide de la commande `Exécuter`).
 
 On peut directement afficher le résultat du count en utilisant la fonction `counts.collect()`. Ceci peut vous permettre de visualiser les différentes étapes menant au comptage du nombre de mots.
 
-**Q.11** On peut également utiliser les fonctions `first()` ou `count()`. Que permettent elles de faire ? En sachant que l'on peut trier une liste à l'aide de la fonction `sortByKey()` donnez la ligne de commande permettant d'afficher une liste triée.
+**Q.11** On peut également utiliser les fonctions `first()` ou `count()`. Que permettent elles de faire ? 
+
+Ajoutez les lignes 
+```console
+.map(lambda x: (x[1],x[0])) \
+.sortByKey(False)
+```
+Que permettent-elles de faire ?
 
 Dans le code précédent on peut constater que certains mots ne sont pas encore correctements traités (ie par exemple `English.`, `English`, `English;`). En effet, `split()` ne prend en compte que les espaces et non les `";.,`. Modifiez le code précédent pour que tous les mots soient traités correctements (ie par exemple `English.` devra être traité comme `English`).
 
