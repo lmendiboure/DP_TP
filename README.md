@@ -131,7 +131,7 @@ Que permettent-elles de faire ?
 
 Dans le code précédent on peut constater que certains mots ne sont pas encore correctements traités (ie par exemple `English.`, `English`, `English;`). En effet, `split()` ne prend en compte que les espaces et non les `";.,`. Modifiez le code précédent pour que tous les mots soient traités correctements (ie par exemple `English.` devra être traité comme `English`).
 
-*Note: Pour ce faire, il sera peut être pertinent d'utiliser une fonction comme `replace`.*
+*Note: Pour ce faire, il sera peut être pertinent d'utiliser une fonction comme `.replace('!','')` et `.lower()`.
 
 **Q.12** Indiquez la ligne de commande que vous venez d'utiliser.
 
