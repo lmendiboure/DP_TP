@@ -1,21 +1,19 @@
 
 # PySpark et Jupyter Notebook: Guide d'installation
 
-### Etape 0: Vérifiez que Python 2.7 est bien installé
+### Etape 0: Vérifiez que Python 3 est bien installé
 
-  - Pour ce faire: `python --version`
+  - Pour ce faire: `python3 --version`
   
-  - Si jamais Python 2.7 n'est pas installé: `sudo apt install python2.7 python-pip`
+  - Si jamais Python 3 n'est pas installé: `sudo apt install python3 python-pip`
 
 ### Etape 1: Téléchargement de Spark
 
   - Choisissez la dernière version disponible de Spark : http://spark.apache.org/downloads.html
 
-**Attention, ce qui nous intéresse c'est la V2 stable d'Aout et non la V3 en test pour l'instant !** 
+**Il s'agit normalement de la version 3** 
 
-Note: l'accès au lien d'install peut prendre un certain temps (notamment sur les machines de l'école).
-
-Note 1 : Pour accélérer les choses, vous pouvez par exemple prendre un autre mirror que celui proposer (celui de l'université de Lorraine, entre autres, fonctionne bien)
+Note : l'accès au lien d'install peut prendre un certain temps (notamment sur les machines de l'école). Pour accélérer les choses, vous pouvez par exemple prendre un autre mirror que celui proposé
   
   - Tapez ensuite les commandes suivantes
  
@@ -65,7 +63,7 @@ JAVA_HOME=/usr/lib/jvm/java-8-oracle
 SPARK_WORKER_MEMORY=4g
 ```
 
-### Etape 5 : Télécharger et installer Anaconda (pour python 2.7 ! )
+### Etape 5 : Télécharger et installer Anaconda 
 
   - Pour télécharger Anaconda : https://www.anaconda.com/distribution/#linux
   - Une fois téléchargé, excécutez le script d'install et validez toutes les questions
@@ -82,7 +80,7 @@ export PATH=$PATH:$JAVA_HOME/bin
 export PATH=$PATH:$SBT_HOME/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin
 export PYSPARK_DRIVER_PYTHON=jupyter
 export PYSPARK_DRIVER_PYTHON_OPTS='notebook --allow-root'
-export PYSPARK_PYTHON=python2.7
+export PYSPARK_PYTHON=python3
 export PYTHONPATH=$SPARK_HOME/python:$PYTHONPATH
 ```
   - Rechargez le fichier bashrc : `source ~/.bashrc`
