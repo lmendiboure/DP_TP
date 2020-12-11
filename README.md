@@ -294,7 +294,7 @@ from pyspark.ml.linalg import Vectors
 from pyspark.ml.feature import VectorAssembler
 
 
-vector_assembler = VectorAssembler(inputCols=["sep_len", "sep_wid", "pet_len", "pet_wid"],outputCol="features")
+vector_assembler = VectorAssembler(inputCols=["sep_len", "sep_wid", "pet_len", "pet_wid"],outputCol="vector_features")
 df_temp = vector_assembler.transform(df)
 df_temp.show(3)
 ```
@@ -421,4 +421,4 @@ C'est le cas de la métropole de Bordeaux par exemple (https://opendata.bordeaux
 
 https://opendata.lillemetropole.fr/explore/dataset/comptage_siredo_historique/table/?sort=-annee&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiU1VNIiwieUF4aXMiOiJtam8iLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiJyYW5nZS1BY2NlbnQifV0sInhBeGlzIjoidmlsbGUiLCJtYXhwb2ludHMiOm51bGwsInNvcnQiOiIiLCJzZXJpZXNCcmVha2Rvd24iOiJhbm5lZSIsInN0YWNrZWQiOiJub3JtYWwiLCJzZXJpZXNCcmVha2Rvd25UaW1lc2NhbGUiOiJ5ZWFyIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJjb21wdGFnZV9zaXJlZG9faGlzdG9yaXF1ZSIsIm9wdGlvbnMiOnsic29ydCI6Ii1hbm5lZSJ9fX1dLCJ0aW1lc2NhbGUiOiIiLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlfQ%3D%3D
 
-quel type d'applications de Spark et plus particulièrement de Machine Learning peut on imaginer ? Donnez au moins 3 exemples.
+Quel type d'applications de Spark et plus particulièrement de Machine Learning peut on imaginer ? Donnez au moins 3 idées.
