@@ -249,7 +249,7 @@ df.printSchema()
 
 **Q.14** Que semble contenir ce fichier ? Si vous modifiez la valeur de la variable `inferSchema` et que vous la mettez à `False`, quelle différence observez vous ? Quel semble être donc l'intérêt de cette variable ?
 
-On peut également décider de modifier le type d'une colonne sans l'utilisation de ce paramètre. Pour ce faire, il faut utiliser la fonction `df[name].cast(newType)`.
+On peut également décider de modifier le type d'une colonne sans l'utilisation de ce paramètre. Pour ce faire, il faut utiliser la fonction `df.withColumn("name", df[name].cast(newType))`.
 
 **Q.15** Comment faudrait il faire pour changer le type de la colonne `sep_wid` en flottant ? Donnez la ligne de code permettant d'y parvenir.
 
