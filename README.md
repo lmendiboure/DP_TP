@@ -12,6 +12,8 @@ Ainsi ce TP ce focalise plus généralement sur le traitement des données (et p
 
 **Note : Les liens proposés pour chacune des questions dirigent vers des pages contenant une réponse partielle ou entière à la question située juste au dessus** 
 
+Afin de pouvoir avancer correctement sur la partie pratique de ce TP, il vous est conseillé de ne pas passer plus d'une trentaine de minutes sur cette première partie théorique (des réponses courtes sont attendues).
+
 **Q.1** Spark est actuellement un des moteurs de traitement de données les plus utilisés. Pourquoi (donnez différentes raisons) ? Quel semble être le gros avantage du traitement en mémoire ?
 
 Liens: 
