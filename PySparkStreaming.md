@@ -1,4 +1,6 @@
-#### 2.2.3 PySpark Streaming
+#### PySpark Streaming
+
+**A faire, si vous le souhaitez, lorsque vous aurez fini le sujet principal**
 
 Et si on voulait faire la même chose avec PySpark Streaming ?
 
