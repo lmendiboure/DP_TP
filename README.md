@@ -4,7 +4,7 @@ Aujourd'hui, que l'on parle d'objets connectés, de santé, de finance ou encore
 
 De nombreux outils (Pandas, Hadoop, Spark, etc.), des moteurs de traitement de données rapide principalement destinés au Big Data ont ainsi été développés. Chacun de ces outils possède des caractéristiques particulières et actuellement Spark est très certainement le moteur de traitement de données Open Source le plus utilisé. C'est pourquoi nous allons essayer de découvrir quelques unes des fonctionnalités de cet outil dans le cadre de ce TP. 
 
-Ainsi ce TP ce focalise plus généralement sur le traitement des données (et pas uniquement sur le traitement des données ITS) et sur comment celui ci peut être réalisé de façon efficace. L'ensemble des outils/procédures que nous allons découvrir sont bien entendu applications dans l'environnement ITS.
+Ainsi ce TP se focalise plus généralement sur le traitement des données (et pas uniquement sur le traitement des données ITS) et sur comment celui ci peut être réalisé de façon efficace. L'ensemble des outils/procédures que nous allons découvrir sont bien entendu applicables dans l'environnement ITS.
 
 **Note : A la fin de la scéance, pensez à m'envoyer un compte-rendu (court) répondant aux différentes questions présentes dans ce TP (leo.mendiboure@univ-eiffel.fr)**
 
@@ -12,7 +12,7 @@ Ainsi ce TP ce focalise plus généralement sur le traitement des données (et p
 
 **Note : Les liens proposés pour chacune des questions dirigent vers des pages contenant une réponse partielle ou entière à la question située juste au dessus** 
 
-Afin de pouvoir avancer correctement sur la partie pratique de ce TP, il vous est conseillé de ne pas passer plus d'une trentaine de minutes sur cette première partie théorique (des réponses courtes sont attendues).
+Afin de pouvoir avancer correctement sur la partie pratique de ce TP, il vous est conseillé de ne pas passer plus d'une quarantaine de minutes sur cette première partie théorique (des réponses courtes sont attendues).
 
 **Q.1** Spark est actuellement un des moteurs de traitement de données les plus utilisés. Pourquoi (donnez différentes raisons) ? Quel semble être le gros avantage du traitement en mémoire ?
 
@@ -22,9 +22,8 @@ Liens:
   
 **Q.2** On parle de Stream Processing et Batch processing. Que signifient ces deux termes, en quoi sont ils différents ? Dans quel cas chacune de ces approches est elle pertinente ?
 
-Liens:
+Lien:
   - https://medium.com/@gowthamy/big-data-battle-batch-processing-vs-stream-processing-5d94600d8103
-  - https://blog.syncsort.com/2017/07/big-data/big-data-101-batch-stream-processing/
 
 *Note : Hadoop, le principal concurrent de Spark au départ offre des performances intéressantes en Batch Processing mais très faibles en Stream Processing (lié au non traitement en mémoire)*
 
@@ -74,15 +73,21 @@ Liens :
 
 ### 2.1 Installation de l'environnement
 
-Pour réaliser l'installation de l'ensemble des composants nécessaires, ouvrez le fichier d'installation (https://github.com/lmendiboure/DP_TP/blob/master/InstallationGuide.md) et suivez l'ensemble des étapes décrites.
+Pour réaliser l'installation de l'ensemble des composants nécessaires, ouvrez le fichier d'installation (https://github.com/lmendiboure/DP_TP/blob/master/InstallationGuide.md) et suivez l'ensemble des étapes décrites (dans l'idéal avc une distro Debian !).
+
+**Note : Alternativement, vous pouvez utiliser la VM dont le lien vous a été transmis. Dans cette VM, l'ensemble du processus d'installation a été réalisé. De plus, le dossier utilisé dans le cadre de ce projet (DP_TP) est également installé à la racine de la machine**
+
+Rappel, lien vers la VM : https://drive.google.com/file/d/1qb597XwReUj1UuJNS2BuoZf8puDh6drj/view?usp=sharing 
+
+Infos de connexion de la VM : user:user | root:root
 
 ### 2.2 Prise en main et premiers traitements
 
 #### 2.2.1 Manipulations de RDDs
 
-L'exemple basique d'utilisation de PySpark (et de nombreux autres moteurs de traitement de données) consiste à réaliser des opérations dans sur fichier texte. Il s'agit notamment d'extraction/sélection/comptage de mots.
+L'exemple basique d'utilisation de PySpark (et de nombreux autres moteurs de traitement de données) consiste à réaliser des opérations sur un fichier texte. Il s'agit notamment d'extraction/sélection/comptage de mots.
 
-On va donc commencer avec cet exemple simple: on va télécharger un fichier en mémoire sous la forme de RDD et chercher à compter le nombre de mots dans ce fichier.
+On va donc commencer avec cet exemple simple : on va télécharger un fichier en mémoire sous la forme de RDD et chercher à compter le nombre de mots dans ce fichier.
 
 Pour ce faire, si ce n'est pas déjà fait, commencez par vous placer dans le dossier contenant le projet (DP_TP).
 
@@ -140,7 +145,7 @@ Dans le code précédent on peut constater que certains mots ne sont pas encore 
 Une autre chose pertinente pourrait être de traiter les résultats que l'on veut afficher à l'écran. On va ici essayer de les trier en fonction de la longueur des mots. Ainsi, on ne va plus vouloir afficher que des mots avec une longueur supérieure à 3.
 
 *Note: Pour ce faire, on pourra utiliser la fonction filter: rdd.filter(lambda x: x[1] > 0)*
-*x[1] correspond ici à la value de la paire key-value, peut être pas l'élément sur lequel nous devons nous agir.*
+*x[1] correspond ici à la value de la paire key-value. Il ne s'agit pas nécessairement de l'élément sur lequel nous devons nous agir ici.*
 
 **Q.13**  Indiquez la ligne de commande que vous venez d'utiliser.
 
