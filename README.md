@@ -104,13 +104,13 @@ On va maintenant rentrer les lignes de codes suivantes:
 ```console
 # On récupère le fichier
 
-text_file = sc.textFile("./word_count_text.txt") # Il est possible que ce chemin ne fonctionne pas
+text_file = sc.textFile("./word_count_text.txt") # Il est possible que ce chemin ne fonctionne pas : os.path peut être utilisé pour trouver le bon chemin 
 
 # counts correspond à des données stockées dans le format de base de Spark: une RDD.
 
 counts = text_file.flatMap(lambda line: line.split(" ")) \
              .map(lambda word: (word, 1)) \
-             .reduceByKey(lambda a, b: a + b) \
+             .reduceByKey(lambda a, b: a + b)
 
 # On stocke le résultat
 
