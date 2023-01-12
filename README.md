@@ -444,7 +444,7 @@ plot_directed_graph(family_tree.edges)
 
 Un autre concept important avec les graphes est la notion de Degré des noeuds. 
 
-**Q.24** Quelle est la différence entre Degré Entrant et Degré Sortant ?
+**Q.24** A quoi correspond cette notion ? Quelle est la différence entre Degré Entrant et Degré Sortant ?
 
 (Source potentielle : https://fr.wikipedia.org/wiki/Degr%C3%A9_(th%C3%A9orie_des_graphes))
 
@@ -471,6 +471,17 @@ tree_outDegree.show()
 
 
 ## Partie 6 : Un petit exemple de traitement de données en autonomie
+
+L'idée est à présent, en vous appuyant sur les fonctions vues précédemment, que vous réalisiez en autonomie certains traitements de données sur un jeu de données que vous pourrez trouver ici (à télécharger dans la VM donc) : https://github.com/CODAIT/redrock/blob/master/twitter-decahose/src/main/resources/Location/worldcitiespop.txt.gz
+
+*Note* : Le code de cette partie devra être joint au rapport qui sera fourni à la fin de cette séance.
+
+Les traitement de données qui devront être réalisés par votre programme sont les suivants :
+  1. Retirez les lignes pour lesquelles l'information relative au nombre d'habitants n'est pas fournie
+  2. Affichez, pour les lignes restantes, differentes informations relatives au nombre d'habitant : valeur minimale, valeur maximale, valeur moyenne. (Pour ce faire, la fonction describe pourrait vous être utile)
+  3. Effectuez un tri sur les données afin de pouvoir afficher les 15 villes avec le nombre d'habitants le plus faible
+  4. Retirez les doublons : Certaines villes apparaissent plusieurs fois sous différents noms dans le fichier qu'il vous reste (exemple : Delhi). Si deux villes sont situées au même endroit (même coordonnées géographiques), retirez de la liste la ville avec le plus petit nombre d'habitants
+
 
 ## Partie 6 : Un petit exemple plus complet en autonomie
 
