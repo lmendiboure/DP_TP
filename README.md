@@ -299,7 +299,7 @@ Pour ce faire, il va suffire d'ajouter la ligne suivante:
 ```console
 (trainingData, testData) = df.randomSplit([0.7, 0.3])
 ```
-On va maintenant appliquer un premier algorithme d'IA et en évaluer les performances: les arbes de décision (http://cedric.cnam.fr/vertigo/Cours/ml2/coursArbresDecision.html).
+On va maintenant appliquer un premier algorithme d'IA et en évaluer les performances: les arbres de décision (http://cedric.cnam.fr/vertigo/Cours/ml2/coursArbresDecision.html).
 
 Pour ce faire, on va avoir besoin des lignes de code suivantes:
 
@@ -366,7 +366,115 @@ print("Test set accuracy = " + str(accuracy))
 ```
 **Conclusion de cette partie :** Même sans connaissance en IA, l'outil de Machine Learning de Spark permet d'appliquer des méthodes d'IA entièrement gérées par la machine (l'humain n'a qu'à paramétrer des options de très haut niveau). Grâce à cela, il est possible pour toute personne de sélectionner l'outil le plus approprié/les paramètres les plus appropriés en fonction de ses besoins et de ses contraintes (temps de traitement, données à disposition, capacité de calcul, etc.)
 
-## Partie 4 : ITS et PySpark : Petit travail de réflexion
+## Partie 5 : Un outil supplémentaire pour la visualisation de données - GraphFrames
+
+**Q.21** Qu'est ce que GraphFrames ? Quel intérêt et quelles applications ?
+
+(Source potentielle : https://graphframes.github.io/graphframes/docs/_site/index.html)
+
+Afin de comprendre comment un package peut être intégré à PySpark, nous allons procéder à l'ajout du package correspondant à GraphFrames.
+
+Pour parvenir à ceci, deux étapes principales vont être nécessaires :
+  1. Télécharger le Package correspondant à GraphFrames et enregistrez le dans le dossier jar de spark : `/usr/lib/spark/jar/` (Attention il faut télécharger la version correspondant à Scala et Spark, pour ce faire, vérifiez également leur version dans ce même dossier !)
+  Pour le téléchargement : https://spark-packages.org/package/graphframes/graphframes 
+  2. Suivez les étapes décrites ici (https://stackoverflow.com/questions/50286139/no-module-named-graphframes-jupyter-notebook) pour ajouter le package GraphFrame et le rendre accessible dans Jupyter 
+
+A ce moment là, vous devriez être capable dans Jupyter de lancer la commande suivante : `from graphframes import *`
+
+Nous allons maintenant tester sur un exemple simple des fonctionnalités basiques de GraphFrames.
+
+Pour ce faire, ajoutez le code suivant à Jupyter :
+
+```
+from graphframes import *
+import networkx as nx
+import matplotlib.pyplot as plt
+vertices = spark.createDataFrame([
+    ("Alice", 45),
+    ("Jacob", 43),
+    ("Roy", 21),
+    ("Ryan", 49),
+    ("Emily", 24),
+    ("Sheldon", 52)],
+    ["id", "age"]
+)
+edges = spark.createDataFrame([("Sheldon", "Alice", "Sister"),
+                              ("Alice", "Jacob", "Husband"),
+                              ("Emily", "Jacob", "Father"),
+                              ("Ryan", "Alice", "Friend"),
+                              ("Alice", "Emily", "Daughter"),
+                              ("Alice", "Roy", "Son"),
+                              ("Jacob", "Roy", "Son")],
+                             ["src", "dst", "relation"])
+vertices.show()
+edges.show()
+family_tree = GraphFrame(vertices, edges)
+ ```
+
+**Q.22** A quoi correspondent les vertices et les edges ? 
+
+Nous allons maintenant tenter de visualiser le Graphe correspondant (orienté et non orienté).
+
+Pour le graphe non orienté, ajoutez les lignes suivantes : 
+```
+def plot_undirected_graph(edge_list):
+    plt.figure(figsize=(9,9))
+    gplot=nx.Graph()
+    for row in edge_list.select("src", "dst").take(1000):
+        gplot.add_edge(row["src"], row["dst"])
+    nx.draw(gplot, with_labels=True, font_weight="bold", node_size=3500)
+plot_undirected_graph(family_tree.edges)
+```
+Pour le graphe orienté, ajoutez les lignes suivantes :
+
+```
+def plot_directed_graph(edge_list):
+    plt.figure(figsize=(9,9))
+    gplot=nx.DiGraph()
+    edge_labels = {}
+    for row in edge_list.select("src", "dst", "relation").take(1000):
+        gplot.add_edge(row["src"], row["dst"])
+        edge_labels[(row["src"], row["dst"])] = row["relation"]
+    pos = nx.spring_layout(gplot)
+    nx.draw(gplot, pos, with_labels=True, font_weight="bold", node_size=3500)
+    nx.draw_networkx_edge_labels(gplot, pos, edge_labels=edge_labels, font_color="green", font_size=11, font_weight="bold")
+plot_directed_graph(family_tree.edges)
+```
+**Q.23** Quelle est la différence entre un Graphe Orienté et un Graphe Non Orienté ?
+
+Un autre concept important avec les graphes est la notion de Degré des noeuds. 
+
+**Q.24** Quelle est la différence entre Degré Entrant et Degré Sortant ?
+
+(Source potentielle : https://fr.wikipedia.org/wiki/Degr%C3%A9_(th%C3%A9orie_des_graphes))
+
+Dans le cas présent, nous pouvons afficher les degrés  des différents noeuds à l'aide des lignes suivantes :
+
+```
+tree_degree = family_tree.degrees
+tree_degree.show()
+degree_edges = edges.filter(("src = 'Alice' or dst = 'Alice'"))
+degree_edges.show()
+plot_directed_graph(degree_edges)
+
+# Degré entrant
+tree_inDegree = family_tree.inDegrees
+tree_inDegree.show()
+indegree_edges = edges.filter(("dst = 'Jacob'"))
+plot_directed_graph(indegree_edges)
+
+# Degré sortant
+
+tree_outDegree = family_tree.outDegrees
+tree_outDegree.show()
+```
+
+
+## Partie 6 : Un petit exemple de traitement de données en autonomie
+
+## Partie 6 : Un petit exemple plus complet en autonomie
+
+## Partie 7 : ITS et PySpark : Petit travail de réflexion
 
 Beaucoup de villes mettent à disposition des données concernant leur infrastructures: listes de gares, aires de covoiturage, liste d'équipements sportifs, aménagements cyclables, etc.
 
