@@ -470,7 +470,7 @@ tree_outDegree.show()
 ```
 
 
-## Partie 6 : Un petit exemple de traitement de données en autonomie
+## Partie 6 : Traitement de données en autonomie
 
 L'idée est à présent, en vous appuyant sur les fonctions vues précédemment, que vous réalisiez en autonomie certains traitements de données sur un jeu de données que vous pourrez trouver ici (à télécharger dans la VM donc) : https://github.com/CODAIT/redrock/blob/master/twitter-decahose/src/main/resources/Location/worldcitiespop.txt.gz
 
@@ -483,15 +483,116 @@ Les traitement de données qui devront être réalisés par votre programme sont
   4. Retirez les doublons : Certaines villes apparaissent plusieurs fois sous différents noms dans le fichier qu'il vous reste (exemple : Delhi). Si deux villes sont situées au même endroit (même coordonnées géographiques), retirez de la liste la ville avec le plus petit nombre d'habitants
 
 
-## Partie 6 : Un petit exemple plus complet en autonomie
+## Partie 6 : Un second exemple de Machine Learning : le clustering
 
-## Partie 7 : ITS et PySpark : Petit travail de réflexion
+Pour cette 6e partie, nous allons à nouveau travailler sur le premier jeu de données auquel nous nous sommes intéressés dans ce TP (Iris). L'idée dans cette partie va être d'appliquer une nouvelle approche de Machine Learning : le clustering
+
+**Q.25** Qu'est ce que le clustering ? Qu'est ce que le partionnement en K-moyennes (`k-means`) ? Quelle est la différence entre apprentissage supervisé et apprentissage non supervisé ? Dans quelle catégorie se classe les solutions de partitionnement ?
+
+Nous allons à present appliquer cette méthode au dataset `iris`.
+
+Pour ce faire, nous allons à nouveau commencer par charler le dataset concerné : 
+
+```
+import pandas as pd
+from sklearn.datasets import load_iris
+from pyspark.sql import SparkSession
+
+df_iris = load_iris(as_frame=True)
+pd_df_iris = pd.DataFrame(df_iris.data, columns = df_iris.feature_names)
+pd_df_iris['target'] = pd.Series(df_iris.target)
+spark_df_iris = spark.createDataFrame(pd_df_iris)
+spark_df_iris = spark_df_iris.drop("target")
+```
+
+Nous allons maintenant appliquer une méthode nécessaire dans contexte : la méthode de silouhette.
+
+```
+from pyspark.ml.feature import VectorAssembler
+assemble=VectorAssembler(inputCols=[
+'sepal length (cm)',
+'sepal width (cm)',
+'petal length (cm)',
+'petal width (cm)'],outputCol = 'iris_features')
+
+assembled_data=assemble.transform(spark_df_iris)
+from pyspark.ml.clustering import KMeans
+from pyspark.ml.evaluation import ClusteringEvaluator
+
+silhouette_scores=[]
+evaluator = ClusteringEvaluator(featuresCol='iris_features', \
+metricName='silhouette', distanceMeasure='squaredEuclidean')
+
+for K in range(2,14):
+
+    KMeans_=KMeans(featuresCol='iris_features', k=K)
+
+    KMeans_fit=KMeans_.fit(assembled_data)
+
+    KMeans_transform=KMeans_fit.transform(assembled_data) 
+
+    evaluation_score=evaluator.evaluate(KMeans_transform)
+
+    silhouette_scores.append(evaluation_score)
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(1,1, figsize =(10,8))
+ax.plot(range(2,11),silhouette_scores)
+ax.set_xlabel('Number of Clusters')
+ax.set_ylabel('Silhouette Score')
+```
+
+
+**Q.26** Quel est l'intérêt de cette méthode dans un contexte de clustering ? Quelle semble être ici le coefficient optimal ?
+
+Nous allons maintenant pouvoir construire et afficher le modèle de clustering en utilisant cette information qui vient d'être récupérée. Pour ce faire, entrez les lignes ci-dessous.
+
+```
+# Construction du modele
+
+# Note : il faut préciser le nombre de clusters, celui-ci correspond à la valeur que vous venez de récupérer
+
+KMeans_=KMeans(featuresCol='iris_features', k=XXX) 
+KMeans_Model=KMeans_.fit(assembled_data)
+KMeans_Assignments=KMeans_Model.transform(assembled_data)
+
+# Visualisation
+
+from pyspark.ml.feature import PCA as PCAml
+pca = PCAml(k=2, inputCol="iris_features", outputCol="pca")
+pca_model = pca.fit(assembled_data)
+
+pca_transformed = pca_model.transform(assembled_data)
+import numpy as np
+x_pca = np.array(pca_transformed.rdd.map(lambda row: row.pca).collect())
+cluster_assignment = np.array(KMeans_Assignments.rdd.map(lambda row: row.prediction).collect()).reshape(-1,1)
+import seaborn as sns
+import matplotlib.pyplot as plt
+pca_data = np.hstack((x_pca,cluster_assignment))
+pca_df = pd.DataFrame(data=pca_data, columns=("1st_principal", "2nd_principal","cluster_assignment"))
+sns.FacetGrid(pca_df,hue="cluster_assignment", height=6).map(plt.scatter, '1st_principal', '2nd_principal' ).add_legend()
+plt.show()
+```
+
+## Partie 7 : Exemple de Clustering en autonomie
+
+Tout comme dans la partie 5, l'idée va être ici d'appliquer en autonomie la méthode de Clustering décrite dans la section précédente. Le code devra ici également être joint au rapport de CI. Le jeu de données sur lequel la méthode devra être appliqué est la suivante : https://drive.google.com/file/d/1kan3BDO7942Re4ecKUxOultk2tcCVOEE/view?usp=sharing 
+
+Des informations relatives à ce jeu de données sont disponibles ici (https://www.kaggle.com/datasets/arjunbhasin2013/ccdata?resource=download) 
+
+Ce que devra faire votre programme est :
+  1. Pré-traiter les données pour que l'approche Machine Learning puisse leur être appliquer
+  2. Déterminer le nombre optimal de clusters nécessaires
+  3. Appliquer la méthode k-means
+  4. Afficher le résultat
+
+
+## Partie 8 : ITS et PySpark : Petit travail de réflexion
 
 Beaucoup de villes mettent à disposition des données concernant leur infrastructures: listes de gares, aires de covoiturage, liste d'équipements sportifs, aménagements cyclables, etc.
 
 C'est le cas de la métropole de Bordeaux par exemple (https://opendata.bordeaux-metropole.fr/explore/?disjunctive.publisher&disjunctive.frequence&disjunctive.territoire&sort=title)
 
-**Q.21** En considérant le tableau ci dessous:
+**Q.27** En considérant le tableau ci dessous:
 
 https://opendata.lillemetropole.fr/explore/dataset/comptage_siredo_historique/table/?sort=-annee&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJjb2x1bW4iLCJmdW5jIjoiU1VNIiwieUF4aXMiOiJtam8iLCJzY2llbnRpZmljRGlzcGxheSI6dHJ1ZSwiY29sb3IiOiJyYW5nZS1BY2NlbnQifV0sInhBeGlzIjoidmlsbGUiLCJtYXhwb2ludHMiOm51bGwsInNvcnQiOiIiLCJzZXJpZXNCcmVha2Rvd24iOiJhbm5lZSIsInN0YWNrZWQiOiJub3JtYWwiLCJzZXJpZXNCcmVha2Rvd25UaW1lc2NhbGUiOiJ5ZWFyIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJjb21wdGFnZV9zaXJlZG9faGlzdG9yaXF1ZSIsIm9wdGlvbnMiOnsic29ydCI6Ii1hbm5lZSJ9fX1dLCJ0aW1lc2NhbGUiOiIiLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlfQ%3D%3D
 
