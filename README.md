@@ -375,7 +375,7 @@ print("Test set accuracy = " + str(accuracy))
 Afin de comprendre comment un package peut être intégré à PySpark, nous allons procéder à l'ajout du package correspondant à GraphFrames.
 
 Pour parvenir à ceci, deux étapes principales vont être nécessaires :
-  1. Télécharger le Package correspondant à GraphFrames et enregistrez le dans le dossier jar de spark : `/usr/lib/spark/jar/` (Attention il faut télécharger la version correspondant à Scala et Spark, pour ce faire, vérifiez également leur version dans ce même dossier !)
+  1. Télécharger le Package correspondant à GraphFrames et enregistrez le dans le dossier jars de spark : `/usr/lib/spark/jars/` (Attention il faut télécharger la version correspondant à Scala et Spark, pour ce faire, vérifiez également leur version dans ce même dossier !)
   Pour le téléchargement : https://spark-packages.org/package/graphframes/graphframes 
   2. Suivez les étapes décrites ici (https://stackoverflow.com/questions/50286139/no-module-named-graphframes-jupyter-notebook) pour ajouter le package GraphFrame et le rendre accessible dans Jupyter 
 
