@@ -483,7 +483,7 @@ Les traitement de données qui devront être réalisés par votre programme sont
   4. Retirez les doublons : Certaines villes apparaissent plusieurs fois sous différents noms dans le fichier qu'il vous reste (exemple : Delhi). Si deux villes sont situées au même endroit (même coordonnées géographiques), retirez de la liste la ville avec le plus petit nombre d'habitants
 
 
-## Partie 6 : Un second exemple de Machine Learning : le clustering
+## Partie 7 : Un second exemple de Machine Learning : le clustering
 
 Pour cette 6e partie, nous allons à nouveau travailler sur le premier jeu de données auquel nous nous sommes intéressés dans ce TP (Iris). L'idée dans cette partie va être d'appliquer une nouvelle approche de Machine Learning : le clustering
 
@@ -573,7 +573,7 @@ sns.FacetGrid(pca_df,hue="cluster_assignment", height=6).map(plt.scatter, '1st_p
 plt.show()
 ```
 
-## Partie 7 : Exemple de Clustering en autonomie
+## Partie 8 : Exemple de Clustering en autonomie
 
 Tout comme dans la partie 5, l'idée va être ici d'appliquer en autonomie la méthode de Clustering décrite dans la section précédente. Le code devra ici également être joint au rapport de CI. Le jeu de données sur lequel la méthode devra être appliqué est la suivante : https://drive.google.com/file/d/1kan3BDO7942Re4ecKUxOultk2tcCVOEE/view?usp=sharing 
 
@@ -586,7 +586,7 @@ Ce que devra faire votre programme est :
   4. Afficher le résultat
 
 
-## Partie 8 : ITS et PySpark : Petit travail de réflexion
+## Partie 9 : ITS et PySpark : Petit travail de réflexion
 
 Beaucoup de villes mettent à disposition des données concernant leur infrastructures: listes de gares, aires de covoiturage, liste d'équipements sportifs, aménagements cyclables, etc.
 
